@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Weekly Pillbox Scheduler - Clinical Atelier</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "secondary-container": "#7efabc",
+                      "surface": "#f7f9ff",
+                      "primary-container": "#1f74d7",
+                      "on-tertiary-fixed": "#00201b",
+                      "inverse-surface": "#2c3136",
+                      "on-surface-variant": "#414753",
+                      "on-secondary-fixed-variant": "#005234",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#fefcff",
+                      "on-primary-fixed-variant": "#00468c",
+                      "surface-variant": "#dee3ea",
+                      "on-error": "#ffffff",
+                      "surface-bright": "#f7f9ff",
+                      "error": "#ba1a1a",
+                      "on-tertiary-fixed-variant": "#005046",
+                      "on-tertiary": "#ffffff",
+                      "inverse-primary": "#a9c7ff",
+                      "primary-fixed": "#d6e3ff",
+                      "on-surface": "#171c21",
+                      "surface-container": "#eaeef5",
+                      "surface-dim": "#d6dae1",
+                      "primary-fixed-dim": "#a9c7ff",
+                      "on-secondary-container": "#00734b",
+                      "error-container": "#ffdad6",
+                      "surface-container-high": "#e4e8ef",
+                      "secondary-fixed": "#7efabc",
+                      "outline-variant": "#c1c6d5",
+                      "on-primary": "#ffffff",
+                      "background": "#f7f9ff",
+                      "secondary-fixed-dim": "#60dda2",
+                      "tertiary": "#00685b",
+                      "primary": "#005bb2",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary-fixed": "#9ff2e1",
+                      "tertiary-fixed-dim": "#83d5c5",
+                      "on-secondary-fixed": "#002112",
+                      "on-primary-fixed": "#001b3d",
+                      "inverse-on-surface": "#edf1f8",
+                      "on-tertiary-container": "#f4fffb",
+                      "tertiary-container": "#2a8274",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#005db7",
+                      "secondary": "#006c47",
+                      "on-background": "#171c21",
+                      "surface-container-low": "#f0f4fb",
+                      "outline": "#727784",
+                      "surface-container-highest": "#dee3ea"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.5rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Manrope"],
+                      "body": ["Inter"],
+                      "label": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pill-grid {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .brand { font-family: 'Manrope', sans-serif; }
+        .slot-pill {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .slot-pill:hover {
+            background-color: #f1f5f9;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm h-16 flex justify-between items-center px-8">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-extrabold text-blue-700 dark:text-blue-400 tracking-tighter brand">Pill Dose</span>
+<nav class="hidden md:flex gap-6 items-center">
+
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 ease-in-out active:scale-95 text-slate-600">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 ease-in-out active:scale-95 text-slate-600">
+<span class="material-symbols-outlined">settings</span>
+</button>
+
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-4rem)] w-64 bg-slate-50 dark:bg-slate-950 flex flex-col p-4 gap-2 border-r border-slate-200 dark:border-slate-800">
+<div class="mb-6 px-2 py-4 bg-white dark:bg-slate-900 rounded-xl shadow-sm">
+<div class="flex items-center gap-3">
+<img alt="Active Patient Avatar" class="w-12 h-12 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrxy_2MdTPiLweRDt0AAOL4Zr_tenjaHYNbSc_YH2TOSDdJ2pDfBwjncFCWHF-yfIwwDC7wQ-lIoEFThZGBBv9WXLHDazscod87WTaO4my7TMuBC9M7r_kaIifGaNR-JNtuI2G7CAidac7ySWCwhJ4v5KqKzV1rMl-nYV4owZUr9Q853C1D3yBYvYq1pmLbLhXtbLFCqYLcJObQqUxs2IDj-fNMfB44f0dAwe5oaEYwp_E-6-QzV0h8pqw-zpQZzxWlHsjiLzOtMk"/>
+<div>
+<p class="text-sm font-bold text-on-surface" id="profileName">Jane Doe</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">Care Giver</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-1 font-['Inter'] text-sm font-medium">
+  <a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-xl">calendar_view_week</span>
+<span>Weekly Schedule</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
+<span class="material-symbols-outlined text-xl">group</span>
+<span>Patient List</span>
+</a>
+
+
+
+</nav>
+<div class="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/30 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-xs">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-200/30 rounded-lg" href="#">
+<span class="material-symbols-outlined">archive</span>
+<span class="text-xs">Archive</span>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="ml-64 mt-16 p-8 bg-surface min-h-[calc(100vh-4rem)] grid grid-cols-12 gap-8">
+<!-- Header & Control Bar -->
+<div class="col-span-12 flex flex-col gap-6">
+<div class="flex justify-between items-end">
+<div>
+<nav class="flex gap-2 text-xs font-semibold text-on-surface-variant mb-2 uppercase tracking-widest">
+<span>Patients</span>
+<span>/</span>
+<span class="text-primary" id="profileNameStep">Jane Doe</span>
+<span>/</span>
+<span>Medication Manager</span>
+</nav>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface">Weekly Pillbox Scheduler</h1>
+<p class="text-on-surface-variant mt-1 font-medium">Coordinate clinical dosages with empathetic precision for the current cycle.</p>
+</div>
+<div class="flex gap-3">
+
+<button onclick="publishSchedule()" class="px-5 py-2.5 bg-primary text-on-primary rounded-lg font-semibold flex items-center gap-2 hover:brightness-105 transition-all shadow-md">
+<span class="material-symbols-outlined text-lg">publish</span>
+                    Publish Schedule
+                </button>
+</div>
+</div>
+<!-- Patient Context Strip -->
+<div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between border border-surface-container-high">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">Selected Patient</span>
+<div class="flex items-center gap-2 cursor-pointer">
+<span id="patientName" class="text-lg font-bold text-on-surface">Loading...</span>
+<span class="material-symbols-outlined text-primary">expand_more</span>
+</div>
+</div>
+<div class="h-8 w-px bg-outline-variant"></div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 bg-secondary-container/20 px-3 py-1.5 rounded-full">
+  <span class="w-2 h-2 rounded-full bg-secondary"></span>
+  <span class="text-xs font-bold text-on-secondary-container">
+    Adherence: <span id="adherence">0%</span>
+  </span>
+</div>
+
+<div class="flex items-center gap-2 bg-primary-fixed px-3 py-1.5 rounded-full">
+  <span class="material-symbols-outlined text-sm text-primary"
+        style="font-variation-settings: 'FILL' 1;">
+    error
+  </span>
+
+  <span class="text-xs font-bold text-on-primary-fixed-variant">
+    <span id="pendingSync">0</span> Meds Pending Sync
+  </span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm font-semibold text-on-surface-variant">Oct 23 - Oct 29</span>
+<div class="flex bg-surface-container-highest rounded-lg p-1">
+<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
+<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12">
+  <div class="bg-white rounded-2xl shadow-sm border overflow-hidden">
+    
+    <!-- HEADER -->
+    <div id="gridHeader" class="pill-grid bg-slate-50 border-b"></div>
+
+    <!-- GRID BODY -->
+    <div id="gridBody"></div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div id="medicineModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-xl w-80">
+    <h3 class="font-bold mb-3">Add Medication</h3>
+    <input id="medicineInput" class="w-full border p-2 rounded mb-4" placeholder="e.g. Panadol 500mg"/>
+    <input 
+  id="timeInput" 
+  type="time" 
+  class="w-full border p-2 rounded mb-2"
+/>
+
+
+    <div class="flex justify-end gap-2">
+      <button onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded">Cancel</button>
+      <button onclick="saveMedicine()" class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
+    </div>
+  </div>
+</div>
+<!-- Right: Drug Database Sidebar -->
+
+</main>
+<!-- Success Message Overlay (Hidden) -->
+<div class="fixed bottom-8 right-8 bg-on-surface text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4 translate-y-24 opacity-0 transition-all pointer-events-none">
+<div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-white">check</span>
+</div>
+<div>
+<p class="font-bold">Schedule Published</p>
+<p class="text-xs text-white/70">Jane Doe will receive the updated pillbox immediately.</p>
+</div>
+</div>
+<script>
+  const user = JSON.parse(localStorage.getItem("user"));
+
+if (user) {
+  console.log(user);
+
+document.getElementById("profileName").innerText = user.name;
+document.getElementById("profileNameStep").innerText = user.name;
+}
+
+
+async function loadStats() {
+  try {
+    const selectedPatient = JSON.parse(localStorage.getItem("selectedPatient"));
+
+  if (!selectedPatient) {
+    alert("No patient selected");
+    return [];
+  }
+
+    const res = await fetch(`http://localhost:3000/api/stats/${selectedPatient._id}`);
+    const data = await res.json();
+
+    console.log("Stats:", data);
+
+    // 🔥 update UI
+    document.getElementById("adherence").innerText =
+      data.adherence + "%";
+
+    document.getElementById("pendingSync").innerText =
+      data.total;
+
+  } catch (err) {
+    console.error("Failed to load stats:", err);
+  }
+}
+
+// load on page start
+loadStats();
+
+async function publishSchedule() {
+  const payload = buildSchedulePayload();
+
+  if (payload.length === 0) {
+    alert("No medicines to save");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:3000/api/schedule", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ schedules: payload })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Schedule saved ✅");
+      console.log(data);
+    } else {
+      alert(data.message || "Error saving schedule");
+    }
+
+  } catch (err) {
+    console.error(err);
+    alert("Server error");
+  }
+}
+function buildSchedulePayload() {
+  
+  const selectedPatient = JSON.parse(localStorage.getItem("selectedPatient"));
+
+  if (!selectedPatient) {
+    alert("No patient selected");
+    return [];
+  }
+
+  const payload = [];
+  const today = new Date();
+
+  Object.keys(schedule).forEach(key => {
+    const [dayOffset, timeSlot] = key.split("-");
+    const items = schedule[key];
+
+    const date = new Date();
+    date.setDate(today.getDate() + parseInt(dayOffset));
+
+    const formattedDate = date.toISOString().split("T")[0];
+
+    items.forEach(item => {
+      payload.push({
+        patientId: selectedPatient._id,
+        date: formattedDate,
+        timeSlot,              // ✅ MORNING / MIDDAY / EVENING
+        actualTime: item.time, // ✅ REAL selected time
+        medicine: item.medicine,
+        status: item.status
+      });
+    });
+  });
+
+  return payload;
+}
+
+  loadPatients();
+
+async function loadPatients() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+  const res = await fetch(`http://localhost:3000/api/caregiver/${user.id}/patients`);
+    const data = await res.json();
+
+    console.log("Patients:", data);
+
+    const patientNameEl = document.getElementById("patientName");
+
+    if (!data.patients || data.patients.length === 0) {
+      // ❌ No patients case
+      patientNameEl.innerText = "No Patient";
+      localStorage.removeItem("selectedPatient");
+      return;
+    }
+
+    // ✅ At least one patient
+    const patient = data.patients[0];
+
+    localStorage.setItem("selectedPatient", JSON.stringify(patient));
+    patientNameEl.innerText = patient.name;
+
+  } catch (err) {
+    console.error("Error loading patients", err);
+    document.getElementById("patientName").innerText = "Error loading";
+  }
+}
+
+
+
+
+    const colorPalette = [
+  "bg-blue-100 border-blue-500",
+  "bg-green-100 border-green-500",
+  "bg-purple-100 border-purple-500",
+  "bg-orange-100 border-orange-500",
+  "bg-pink-100 border-pink-500",
+  "bg-yellow-100 border-yellow-500",
+  "bg-indigo-100 border-indigo-500"
+];
+
+let medicineColorMap = {};
+let colorIndex = 0;
+
+function getMedicineColor(medicine) {
+  if (!medicineColorMap[medicine]) {
+    medicineColorMap[medicine] = colorPalette[colorIndex % colorPalette.length];
+    colorIndex++;
+  }
+  return medicineColorMap[medicine];
+}
+const daysShort = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const times = ["MORNING","MIDDAY","EVENING"];
+
+let schedule = {};
+let selectedKey = null;
+let selectedElement = null;
+
+// ✅ Generate Header
+function generateHeader() {
+  const today = new Date();
+  let html = `<div class="p-4"></div>`;
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setDate(today.getDate() + i);
+
+    html += `
+      <div class="text-center py-4 border-l">
+        <span class="text-xs font-bold block">${daysShort[d.getDay()]}</span>
+        <span class="text-lg font-bold">${d.getDate()}</span>
+      </div>
+    `;
+  }
+
+  document.getElementById("gridHeader").innerHTML = html;
+}
+
+// ✅ Generate Grid
+function generateGrid() {
+  const body = document.getElementById("gridBody");
+  let html = "";
+
+  times.forEach(time => {
+    html += `<div class="pill-grid border-b">`;
+
+    // Row label
+   const timeIcons = {
+  MORNING: "light_mode",
+  MIDDAY: "wb_sunny",
+  EVENING: "nights_stay"
+};
+
+html += `
+  <div class="flex flex-col items-center justify-center p-4 gap-1">
+    <span class="material-symbols-outlined text-lg">
+      ${timeIcons[time]}
+    </span>
+    <span class="text-[10px] font-bold">${time}</span>
+  </div>
+`;
+
+    // 7 days
+    for (let i = 0; i < 7; i++) {
+      const key = `${i}-${time}`;
+
+      html += `
+        <div 
+          class="p-2 border-l min-h-[90px] cursor-pointer hover:bg-gray-50"
+          onclick="openModal(this, '${key}')"
+          id="slot-${key}"
+        ></div>
+      `;
+    }
+
+    html += `</div>`;
+  });
+
+  body.innerHTML = html;
+}
+
+// ✅ Open Modal
+function openModal(element, key) {
+  selectedElement = element;
+  selectedKey = key;
+
+  const [, timeSlot] = key.split("-");
+
+  const timeInput = document.getElementById("timeInput");
+
+  const slotConfig = {
+    MORNING: {
+      min: "05:00",
+      max: "11:59",
+      default: "08:00"
+    },
+    MIDDAY: {
+      min: "12:00",
+      max: "16:59",
+      default: "13:00"
+    },
+    EVENING: {
+      min: "17:00",
+      max: "23:00",
+      default: "20:00"
+    }
+  };
+
+  const config = slotConfig[timeSlot];
+
+  // ✅ Restrict selectable time
+  timeInput.min = config.min;
+  timeInput.max = config.max;
+
+  // ✅ Set default time
+  timeInput.value = config.default;
+
+  document.getElementById("medicineModal").classList.remove("hidden");
+}
+
+// ✅ Close Modal
+function closeModal() {
+  document.getElementById("medicineModal").classList.add("hidden");
+}
+function editMedicine(key, index) {
+  const newName = prompt("Edit medicine");
+
+  if (!newName) return;
+
+  schedule[key][index].medicine = newName;
+
+  renderSlot(key);
+}
+// ✅ Save Medicine
+function saveMedicine() {
+  const medicine = document.getElementById("medicineInput").value.trim();
+  const time = document.getElementById("timeInput").value;
+  const timeInput = document.getElementById("timeInput");
+
+  if (!medicine || !time) return;
+
+  // ❌ Prevent invalid manual input
+  if (time < timeInput.min || time > timeInput.max) {
+    alert("Please select a valid time for this slot");
+    return;
+  }
+
+  if (!schedule[selectedKey]) {
+    schedule[selectedKey] = [];
+  }
+
+  schedule[selectedKey].push({
+    medicine,
+    time,
+    status: "PENDING"
+  });
+
+  renderSlot(selectedKey);
+  closeModal();
+}
+
+// ✅ Render Slot
+function renderSlot(key) {
+  const slot = document.getElementById(`slot-${key}`);
+  const items = schedule[key];
+
+  if (!items || items.length === 0) {
+    slot.innerHTML = "";
+    return;
+  }
+
+  let html = "";
+
+  items.forEach((item, index) => {
+    let color = getMedicineColor(item.medicine);
+
+    if (item.status === "TAKEN") {
+      color = "bg-green-200 border-green-700";
+    }
+
+    if (item.status === "MISSED") {
+      color = "bg-red-200 border-red-700";
+    }
+
+html += `
+  <div 
+    class="${color} px-2 py-1 rounded border-l-2 text-xs font-bold truncate"
+  >
+    ${item.medicine}
+    <div class="text-[10px] opacity-70">${item.time}</div>
+  </div>
+`;
+  });
+
+  slot.innerHTML = html;
+}
+
+// INIT
+generateHeader();
+generateGrid();
+</script>
+</body></html>

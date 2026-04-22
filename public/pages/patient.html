@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pill Dose | Patient Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-surface": "#2c3136",
+                        "tertiary-fixed": "#9ff2e1",
+                        "surface-container": "#eaeef5",
+                        "inverse-on-surface": "#edf1f8",
+                        "secondary-fixed": "#7efabc",
+                        "background": "#f7f9ff",
+                        "primary-fixed": "#d6e3ff",
+                        "on-surface-variant": "#414753",
+                        "surface-variant": "#dee3ea",
+                        "outline-variant": "#c1c6d5",
+                        "on-primary-fixed-variant": "#00468c",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#1f74d7",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f7f9ff",
+                        "surface": "#f7f9ff",
+                        "error-container": "#ffdad6",
+                        "error": "#ba1a1a",
+                        "secondary": "#006c47",
+                        "on-tertiary-fixed": "#00201b",
+                        "on-surface": "#171c21",
+                        "on-primary-fixed": "#001b3d",
+                        "tertiary-container": "#2a8274",
+                        "surface-container-low": "#f0f4fb",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002112",
+                        "secondary-fixed-dim": "#60dda2",
+                        "inverse-primary": "#a9c7ff",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#dee3ea",
+                        "on-secondary-container": "#00734b",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed-dim": "#83d5c5",
+                        "surface-dim": "#d6dae1",
+                        "on-tertiary-fixed-variant": "#005046",
+                        "on-secondary-fixed-variant": "#005234",
+                        "surface-tint": "#005db7",
+                        "on-background": "#171c21",
+                        "primary": "#005bb2",
+                        "on-tertiary-container": "#f4fffb",
+                        "secondary-container": "#7efabc",
+                        "tertiary": "#00685b",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a9c7ff",
+                        "on-primary-container": "#fefcff",
+                        "surface-container-high": "#e4e8ef",
+                        "outline": "#727784"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .pill-grid-item {
+            aspect-ratio: 1 / 1;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-950/80 backdrop-blur-xl shadow-sm dark:shadow-none">
+<div class="flex justify-between items-center w-full px-6 py-3 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-blue-700 dark:text-blue-400 font-headline">
+                Pill Dose
+            </div>
+<nav class="hidden md:flex gap-8 items-center font-manrope tracking-tight">
+<a class="text-blue-700 dark:text-blue-400 font-semibold border-b-2 border-blue-700 dark:border-blue-400 pb-1" href="#">Dashboard</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Patients</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Schedule</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Insights</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<img alt="User profile avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10" data-alt="Portrait of a middle-aged woman with a gentle smile, soft natural lighting, professional medical profile aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaQBIfrxhmzD1ZcDtHfHA8EmQIf40LEWKDQuXpwuBhZfQGtUXNiqDdPqkQTS-0kRRe5yUQ6KAPMUl1BhrL0HsVtU-vAGbND8agkfQ8spyNlGrkkwg6fD9_9NsBIe2-PhPbn1ZMIV-fy8yTCTnYhOVZU34t7dU8XdAqFb0Rwk4w5Tb91juv5L6cMkCdmJxDtl5u2xOZVdzyPGYOnxusHU1kv9yyv5WwTnVhaHqqpj6DvmR1JsxKafWK_f2UqLcMTmSur6nv5lsv4zo"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-screen-2xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Welcome & Progress Section (Bento Grid Style) -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Good morning, Elena.</h1>
+<p class="text-on-surface-variant text-lg">You're doing great. 85% of your weekly vitals are on track.</p>
+</div>
+<div class="bg-primary-container text-on-primary-container px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
+<div class="flex flex-col">
+<span class="text-xs font-semibold uppercase tracking-widest opacity-80">Next Dose</span>
+<span class="text-xl font-bold">10:30 AM</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medication</span>
+</div>
+</div>
+</section>
+<!-- Main Pillbox Grid -->
+<section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
+<div class="flex justify-between items-center mb-8">
+<h2 class="text-2xl font-bold tracking-tight text-on-surface">Weekly Pillbox Visualizer</h2>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
+<div class="w-3 h-3 rounded-full bg-secondary"></div> Taken
+                        </div>
+<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
+<div class="w-3 h-3 rounded-full bg-primary"></div> Upcoming
+                        </div>
+<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
+<div class="w-3 h-3 rounded-full bg-error"></div> Missed
+                        </div>
+</div>
+</div>
+<div class="grid grid-cols-7 gap-4">
+<!-- Weekday Labels -->
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Mon</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Tue</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Wed</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Thu</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Fri</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Sat</div>
+<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Sun</div>
+<!-- 21 Slots Visual Grid (Morning, Midday, Evening) -->
+<!-- Row 1: Morning -->
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-error/10 border-2 border-error rounded-2xl flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">cancel</span>
+</div>
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-primary/10 border-2 border-primary rounded-2xl flex flex-col items-center justify-center text-primary animate-pulse">
+<span class="text-[10px] font-bold uppercase mb-1">Now</span>
+<span class="material-symbols-outlined text-3xl">schedule</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<!-- Row 2: Midday -->
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<!-- Row 3: Evening -->
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
+</div>
+</div>
+<!-- Completion Progress Bar -->
+<div class="mt-12 space-y-4">
+<div class="flex justify-between items-end">
+<span class="text-sm font-bold text-on-surface uppercase tracking-widest">Daily Adherence Completion</span>
+<span class="text-3xl font-extrabold text-secondary">72%</span>
+</div>
+<div class="h-4 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 72%"></div>
+</div>
+</div>
+</section>
+</div>
+<!-- Sidebar / Right Panel -->
+<div class="lg:col-span-4 flex flex-col gap-8">
+<!-- My Caregiver Section -->
+<section class="bg-surface-container-low rounded-3xl p-6 relative overflow-hidden">
+<div class="relative z-10">
+<h3 class="text-xl font-bold text-on-surface mb-6">My Caregiver</h3>
+<!-- Caregiver Connected State -->
+<div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm mb-6">
+<img alt="Dr. Julian Vane avatar" class="w-14 h-14 rounded-xl object-cover" data-alt="Close-up of a professional male doctor in his 40s wearing a white lab coat, clean studio background, trustworthy expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWW4j6uP0n6dTvYr3zleK4rJBnPFPbLZOs-iijsbhErurLyyiCf8d2WMzdTWM3R9GfUEGsFdO3E1vBlWnkKpe_0iQLDr3-OEzlD4Ve-6yFDfwK3oj8B63PDkQ7tMMZJuzF4j8PacXFS7Tjagnkr9-qzgctdIzxqcKfZzQ2ad9WYuOHHdPoZlUAIVu9q41XWNOuMxLTgww9eoJ3Oro3TbxC1YrSfW44-jFVOFlpa-yWSkcIDqG6fyezkwmcZ3QBw1bXzNbpLtrRMxM"/>
+<div>
+<p class="font-bold text-on-surface">Dr. Julian Vane</p>
+<p class="text-xs text-on-surface-variant">Connected since Feb 2024</p>
+<div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-secondary uppercase tracking-tight">
+<span class="material-symbols-outlined text-sm">verified</span> Active Monitoring
+                            </div>
+</div>
+</div>
+<button class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-xl hover:bg-surface-variant transition-all active:scale-95 flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined text-lg">share</span> Share Connection Code
+                    </button>
+<p class="text-[11px] text-on-surface-variant text-center leading-relaxed">
+                        Sharing this code allows your healthcare provider to view your medication adherence and vitality trends in real-time.
+                    </p>
+</div>
+<!-- Background Decorative Element -->
+<div class="absolute -right-12 -bottom-12 w-40 h-40 bg-secondary/5 rounded-full blur-3xl"></div>
+</section>
+<!-- Notifications / Insights Section -->
+<section class="bg-white border-l-4 border-primary rounded-2xl p-6 shadow-sm">
+<div class="flex items-start gap-4">
+<div class="p-2 bg-primary/10 text-primary rounded-lg">
+<span class="material-symbols-outlined">info</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface leading-tight mb-1">Clinical Insight</h4>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+                            Your consistency in the morning has improved by 12% this week. Maintaining this rhythm stabilizes your blood pressure.
+                        </p>
+</div>
+</div>
+</section>
+<!-- Quick Stats Card -->
+<section class="grid grid-cols-2 gap-4">
+<div class="bg-tertiary-container text-on-tertiary-container p-5 rounded-3xl">
+<span class="material-symbols-outlined mb-2">favorite</span>
+<p class="text-xs font-medium uppercase tracking-widest opacity-80">Resting BPM</p>
+<p class="text-2xl font-bold font-headline">72</p>
+</div>
+<div class="bg-secondary-fixed text-on-secondary-fixed p-5 rounded-3xl">
+<span class="material-symbols-outlined mb-2">water_drop</span>
+<p class="text-xs font-medium uppercase tracking-widest opacity-80">Hydration</p>
+<p class="text-2xl font-bold font-headline">1.2L</p>
+</div>
+</section>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pt-3 pb-8 md:hidden bg-white/90 dark:bg-slate-950/90 backdrop-blur-2xl z-50 rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+<a class="flex flex-col items-center justify-center bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 rounded-2xl px-6 py-2 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-blue-600 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">view_module</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-widest mt-1">Pillbox</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-blue-600 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">favorite</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-widest mt-1">Caregiver</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 px-6 py-2 hover:text-blue-600 transition-transform active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-inter text-[10px] font-medium uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>
