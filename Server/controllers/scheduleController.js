@@ -36,3 +36,30 @@ exports.createSchedule = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+exports.getSchedulesForPatient = async (req, res) => {
+  try {
+    const { patientId } = req.params;
+
+    const schedules = await Schedule.find({ patientId });
+
+    res.json(schedules);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+exports.deleteSchedule = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await Schedule.findByIdAndDelete(id);
+
+    res.json({ message: "Deleted successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Delete failed" });
+  }
+};

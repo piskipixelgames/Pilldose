@@ -590,22 +590,107 @@ function renderSlot(key) {
     if (item.status === "MISSED") {
       color = "bg-red-200 border-red-700";
     }
-
+    
 html += `
-  <div 
-    class="${color} px-2 py-1 rounded border-l-2 text-xs font-bold truncate"
-  >
+  <div class="relative group ${color} px-2 py-1 rounded border-l-2 text-xs font-bold truncate">
+    
     ${item.medicine}
     <div class="text-[10px] opacity-70">${item.time}</div>
+
+    <!-- DELETE BUTTON -->
+    <button 
+      onclick="event.stopPropagation(); deleteMedicine('${key}', ${index})"
+      class="absolute top-0 right-0 text-xs px-1 text-red-600 opacity-0 group-hover:opacity-100"
+    >
+      ✕
+    </button>
+
   </div>
 `;
   });
 
   slot.innerHTML = html;
 }
+async function loadSchedule() {
+  try {
+    const selectedPatient = JSON.parse(localStorage.getItem("selectedPatient"));
+
+    if (!selectedPatient) return;
+
+    const res = await fetch(`http://localhost:3000/api/schedule/${selectedPatient._id}`);
+    const data = await res.json();
+
+    console.log("Loaded schedule:", data);
+
+    mapScheduleToGrid(data);
+
+  } catch (err) {
+    console.error("Error loading schedule", err);
+  }
+}
+
+function mapScheduleToGrid(data) {
+  schedule = {}; // reset
+
+  const today = new Date();
+
+  data.forEach(item => {
+    const itemDate = new Date(item.date);
+
+    // calculate day offset
+    const diffTime = itemDate - today;
+    const dayOffset = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+    if (dayOffset < 0 || dayOffset > 6) return; // only current week
+
+    const key = `${dayOffset}-${item.timeSlot}`;
+
+    if (!schedule[key]) {
+      schedule[key] = [];
+    }
+
+    schedule[key].push({
+       _id: item._id,  
+      medicine: item.medicine,
+      time: item.actualTime,
+      status: item.status
+    });
+
+    renderSlot(key);
+  });
+}
+
+async function deleteMedicine(key, index) {
+  const item = schedule[key][index];
+
+  // 1. Remove from UI immediately
+  schedule[key].splice(index, 1);
+
+  if (schedule[key].length === 0) {
+    delete schedule[key];
+  }
+
+  renderSlot(key);
+
+  // 2. If NOT saved yet → stop here
+  if (!item._id) return;
+
+  // 3. Delete from backend
+  try {
+    await fetch(`http://localhost:3000/schedule/${item._id}`, {
+      method: "DELETE"
+    });
+
+    console.log("Deleted from DB");
+
+  } catch (err) {
+    console.error("Delete failed", err);
+  }
+}
 
 // INIT
 generateHeader();
 generateGrid();
+loadSchedule();
 </script>
 </body></html>

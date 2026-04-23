@@ -28,7 +28,8 @@ app.post("/api/pair", pairController.pairPatient);
 app.get("/api/caregiver/:caregiverId/patients", caregiverController.getPatientsForCaregiver);
 app.get("/api/patient/:patientId/caregivers", patientController.getCaregiversForPatient);
 app.post("/api/schedule", scheduleController.createSchedule);
-
+app.get("/api/schedule/:patientId", scheduleController.getSchedulesForPatient);
+app.delete("/schedule/:id", scheduleController.deleteSchedule);
 app.get("/api/stats/:userId", statsController.getStats);
 app.listen(process.env.PORT, () =>
   console.log("Server running on port " + process.env.PORT)
