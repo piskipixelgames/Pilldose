@@ -96,19 +96,11 @@
                 Pill Dose
             </div>
 <nav class="hidden md:flex gap-8 items-center font-manrope tracking-tight">
-<a class="text-blue-700 dark:text-blue-400 font-semibold border-b-2 border-blue-700 dark:border-blue-400 pb-1" href="#">Dashboard</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Patients</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Schedule</a>
-<a class="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors" href="#">Insights</a>
+
+
 </nav>
 <div class="flex items-center gap-4">
-<button class="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95">
-<span class="material-symbols-outlined">notifications</span>
-</button>
-<button class="p-2 text-slate-500 hover:bg-blue-50/50 rounded-full transition-all active:scale-95">
-<span class="material-symbols-outlined">settings</span>
-</button>
-<img alt="User profile avatar" class="w-10 h-10 rounded-full object-cover ring-2 ring-primary/10" data-alt="Portrait of a middle-aged woman with a gentle smile, soft natural lighting, professional medical profile aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDaQBIfrxhmzD1ZcDtHfHA8EmQIf40LEWKDQuXpwuBhZfQGtUXNiqDdPqkQTS-0kRRe5yUQ6KAPMUl1BhrL0HsVtU-vAGbND8agkfQ8spyNlGrkkwg6fD9_9NsBIe2-PhPbn1ZMIV-fy8yTCTnYhOVZU34t7dU8XdAqFb0Rwk4w5Tb91juv5L6cMkCdmJxDtl5u2xOZVdzyPGYOnxusHU1kv9yyv5WwTnVhaHqqpj6DvmR1JsxKafWK_f2UqLcMTmSur6nv5lsv4zo"/>
+
 </div>
 </div>
 </header>
@@ -132,108 +124,8 @@
 </section>
 <!-- Main Pillbox Grid -->
 <section class="bg-surface-container-lowest rounded-3xl p-8 shadow-sm">
-<div class="flex justify-between items-center mb-8">
-<h2 class="text-2xl font-bold tracking-tight text-on-surface">Weekly Pillbox Visualizer</h2>
-<div class="flex gap-4">
-<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
-<div class="w-3 h-3 rounded-full bg-secondary"></div> Taken
-                        </div>
-<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
-<div class="w-3 h-3 rounded-full bg-primary"></div> Upcoming
-                        </div>
-<div class="flex items-center gap-2 text-sm font-medium text-on-surface-variant">
-<div class="w-3 h-3 rounded-full bg-error"></div> Missed
-                        </div>
-</div>
-</div>
-<div class="grid grid-cols-7 gap-4">
-<!-- Weekday Labels -->
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Mon</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Tue</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Wed</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Thu</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Fri</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Sat</div>
-<div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">Sun</div>
-<!-- 21 Slots Visual Grid (Morning, Midday, Evening) -->
-<!-- Row 1: Morning -->
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-error/10 border-2 border-error rounded-2xl flex items-center justify-center text-error">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">cancel</span>
-</div>
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-primary/10 border-2 border-primary rounded-2xl flex flex-col items-center justify-center text-primary animate-pulse">
-<span class="text-[10px] font-bold uppercase mb-1">Now</span>
-<span class="material-symbols-outlined text-3xl">schedule</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<!-- Row 2: Midday -->
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<!-- Row 3: Evening -->
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-<span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-<div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-<span class="material-symbols-outlined text-3xl">radio_button_unchecked</span>
-</div>
-</div>
-<!-- Completion Progress Bar -->
-<div class="mt-12 space-y-4">
-<div class="flex justify-between items-end">
-<span class="text-sm font-bold text-on-surface uppercase tracking-widest">Daily Adherence Completion</span>
-<span class="text-3xl font-extrabold text-secondary">72%</span>
-</div>
-<div class="h-4 w-full bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-secondary rounded-full" style="width: 72%"></div>
-</div>
-</div>
+<div id="patientGridHeader" class="grid grid-cols-7 gap-4 mb-4"></div>
+<div id="patientGrid" class="grid grid-cols-7 gap-4"></div>
 </section>
 </div>
 <!-- Sidebar / Right Panel -->
@@ -311,4 +203,112 @@
 <span class="font-inter text-[10px] font-medium uppercase tracking-widest mt-1">Profile</span>
 </a>
 </nav>
+
+
+<script>
+
+
+function generatePatientHeader() {
+  const container = document.getElementById("patientGridHeader");
+  container.innerHTML = "";
+
+  const today = new Date();
+  const daysShort = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+  for (let i = 0; i < 7; i++) {
+    const d = new Date();
+    d.setDate(today.getDate() + i);
+
+    container.innerHTML += `
+      <div class="text-center text-xs font-bold text-outline uppercase tracking-widest py-2">
+        ${daysShort[d.getDay()]} <br/>
+        <span class="text-sm">${d.getDate()}</span>
+      </div>
+    `;
+  }
+}
+function renderPatientGrid(data) {
+  const container = document.getElementById("patientGrid");
+  container.innerHTML = "";
+
+  const today = new Date();
+  const slots = ["MORNING", "MIDDAY", "EVENING"];
+
+  slots.forEach(slot => {
+    for (let i = 0; i < 7; i++) {
+
+      const d = new Date();
+      d.setDate(today.getDate() + i);
+      const formatted = d.toISOString().split("T")[0];
+
+      const items = data.filter(item =>
+        item.date === formatted && item.timeSlot === slot
+      );
+
+      container.innerHTML += createPatientCell(items);
+    }
+  });
+}
+function createPatientCell(items) {
+  if (!items || items.length === 0) {
+    return `
+      <div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
+        <span class="material-symbols-outlined">radio_button_unchecked</span>
+      </div>
+    `;
+  }
+
+  // priority logic
+  let status = "PENDING";
+
+  if (items.some(i => i.status === "MISSED")) status = "MISSED";
+  else if (items.every(i => i.status === "TAKEN")) status = "TAKEN";
+
+  if (status === "TAKEN") {
+    return `
+      <div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+      </div>
+    `;
+  }
+
+  if (status === "MISSED") {
+    return `
+      <div class="pill-grid-item bg-error/10 border-2 border-error rounded-2xl flex items-center justify-center text-error">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cancel</span>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="pill-grid-item bg-primary/10 border-2 border-primary rounded-2xl flex items-center justify-center text-primary">
+      <span class="material-symbols-outlined">schedule</span>
+    </div>
+  `;
+}
+async function loadPatientSchedule() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      console.error("No user found");
+      return;
+    }
+
+    const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
+    const data = await res.json();
+
+    console.log("Patient Schedule:", data);
+
+    renderPatientGrid(data);
+
+  } catch (err) {
+    console.error("Error loading patient schedule:", err);
+  }
+}
+generatePatientHeader();
+loadPatientSchedule();
+
+
+</script>
 </body></html>

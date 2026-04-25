@@ -205,10 +205,9 @@
 </div>
 </div>
 <div class="flex items-center gap-4">
-<span class="text-sm font-semibold text-on-surface-variant">Oct 23 - Oct 29</span>
+<span id="dateRange" class="text-sm font-semibold text-on-surface-variant"></span>
 <div class="flex bg-surface-container-highest rounded-lg p-1">
-<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-lg">chevron_left</span></button>
-<button class="p-1 hover:bg-white rounded transition-colors"><span class="material-symbols-outlined text-lg">chevron_right</span></button>
+
 </div>
 </div>
 </div>
@@ -558,11 +557,25 @@ function saveMedicine() {
     schedule[selectedKey] = [];
   }
 
+const existingIndex = schedule[selectedKey].findIndex(
+  item => item.time === time
+);
+
+if (existingIndex !== -1) {
+  // 🔁 UPDATE existing
+  schedule[selectedKey][existingIndex] = {
+    ...schedule[selectedKey][existingIndex],
+    medicine,
+    status: "PENDING"
+  };
+} else {
+  // ➕ CREATE new
   schedule[selectedKey].push({
     medicine,
     time,
     status: "PENDING"
   });
+}
 
   renderSlot(selectedKey);
   closeModal();
@@ -630,18 +643,19 @@ async function loadSchedule() {
 }
 
 function mapScheduleToGrid(data) {
-  schedule = {}; // reset
+  schedule = {};
 
   const today = new Date();
+  today.setHours(0, 0, 0, 0); // 🔥 normalize
 
   data.forEach(item => {
     const itemDate = new Date(item.date);
+    itemDate.setHours(0, 0, 0, 0); // 🔥 normalize
 
-    // calculate day offset
-    const diffTime = itemDate - today;
+    const diffTime = itemDate.getTime() - today.getTime();
     const dayOffset = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-    if (dayOffset < 0 || dayOffset > 6) return; // only current week
+    if (dayOffset < 0 || dayOffset > 6) return;
 
     const key = `${dayOffset}-${item.timeSlot}`;
 
@@ -650,12 +664,15 @@ function mapScheduleToGrid(data) {
     }
 
     schedule[key].push({
-       _id: item._id,  
+      _id: item._id,
       medicine: item.medicine,
       time: item.actualTime,
       status: item.status
     });
+  });
 
+  // 🔥 IMPORTANT: render AFTER mapping
+  Object.keys(schedule).forEach(key => {
     renderSlot(key);
   });
 }
@@ -688,9 +705,26 @@ async function deleteMedicine(key, index) {
   }
 }
 
+function generateDateRange() {
+  const today = new Date();
+
+  const start = new Date(today);
+  const end = new Date(today);
+  end.setDate(today.getDate() + 6);
+
+  const options = { month: "short", day: "numeric" };
+
+  const startStr = start.toLocaleDateString("en-US", options);
+  const endStr = end.toLocaleDateString("en-US", options);
+
+  document.getElementById("dateRange").innerText =
+    `${startStr} - ${endStr}`;
+}
+
 // INIT
 generateHeader();
 generateGrid();
+generateDateRange();
 loadSchedule();
 </script>
 </body></html>

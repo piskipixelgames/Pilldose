@@ -10,25 +10,36 @@ exports.createSchedule = async (req, res) => {
 
     console.log("📥 Incoming schedules:", schedules);
 
-    const savedSchedules = await Schedule.insertMany(schedules);
+    let results = [];
 
-    // ✅ Log what was actually saved in DB
-    console.log("✅ Saved schedules:");
-    savedSchedules.forEach(s => {
-      console.log({
-        id: s._id,
-        patientId: s.patientId,
-        date: s.date,
-        timeSlot: s.timeSlot,
-        actualTime: s.actualTime,
-        medicine: s.medicine,
-        status: s.status
-      });
-    });
+    for (const item of schedules) {
+      const updated = await Schedule.findOneAndUpdate(
+        {
+          patientId: item.patientId,
+          date: item.date,
+          timeSlot: item.timeSlot,
+          actualTime: item.actualTime // 🔥 key uniqueness
+        },
+        {
+          $set: {
+            medicine: item.medicine,
+            status: item.status
+          }
+        },
+        {
+          upsert: true,
+          new: true
+        }
+      );
+
+      results.push(updated);
+    }
+
+    console.log("✅ Upserted schedules:", results.length);
 
     res.json({
-      message: "Schedules saved successfully",
-      count: savedSchedules.length
+      message: "Schedules created/updated successfully",
+      count: results.length
     });
 
   } catch (err) {
@@ -36,6 +47,7 @@ exports.createSchedule = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
 exports.getSchedulesForPatient = async (req, res) => {
   try {
     const { patientId } = req.params;
