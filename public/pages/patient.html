@@ -109,13 +109,18 @@
 <div class="lg:col-span-8 flex flex-col gap-8">
 <section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
 <div>
-<h1 class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">Good morning, Elena.</h1>
-<p class="text-on-surface-variant text-lg">You're doing great. 85% of your weekly vitals are on track.</p>
+  <h1 id="greetingText" class="text-4xl font-extrabold tracking-tight text-on-surface mb-2">
+    Good morning, User
+  </h1>
+
+  <p id="progressText" class="text-on-surface-variant text-lg">
+    Loading your progress...
+  </p>
 </div>
 <div class="bg-primary-container text-on-primary-container px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
 <div class="flex flex-col">
 <span class="text-xs font-semibold uppercase tracking-widest opacity-80">Next Dose</span>
-<span class="text-xl font-bold">10:30 AM</span>
+<span id="nextDoseTime" class="text-xl font-bold">--:--</span>
 </div>
 <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medication</span>
@@ -132,26 +137,7 @@
 <div class="lg:col-span-4 flex flex-col gap-8">
 <!-- My Caregiver Section -->
 <section class="bg-surface-container-low rounded-3xl p-6 relative overflow-hidden">
-<div class="relative z-10">
-<h3 class="text-xl font-bold text-on-surface mb-6">My Caregiver</h3>
-<!-- Caregiver Connected State -->
-<div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm mb-6">
-<img alt="Dr. Julian Vane avatar" class="w-14 h-14 rounded-xl object-cover" data-alt="Close-up of a professional male doctor in his 40s wearing a white lab coat, clean studio background, trustworthy expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWW4j6uP0n6dTvYr3zleK4rJBnPFPbLZOs-iijsbhErurLyyiCf8d2WMzdTWM3R9GfUEGsFdO3E1vBlWnkKpe_0iQLDr3-OEzlD4Ve-6yFDfwK3oj8B63PDkQ7tMMZJuzF4j8PacXFS7Tjagnkr9-qzgctdIzxqcKfZzQ2ad9WYuOHHdPoZlUAIVu9q41XWNOuMxLTgww9eoJ3Oro3TbxC1YrSfW44-jFVOFlpa-yWSkcIDqG6fyezkwmcZ3QBw1bXzNbpLtrRMxM"/>
-<div>
-<p class="font-bold text-on-surface">Dr. Julian Vane</p>
-<p class="text-xs text-on-surface-variant">Connected since Feb 2024</p>
-<div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-secondary uppercase tracking-tight">
-<span class="material-symbols-outlined text-sm">verified</span> Active Monitoring
-                            </div>
-</div>
-</div>
-<button class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-xl hover:bg-surface-variant transition-all active:scale-95 flex items-center justify-center gap-2 mb-4">
-<span class="material-symbols-outlined text-lg">share</span> Share Connection Code
-                    </button>
-<p class="text-[11px] text-on-surface-variant text-center leading-relaxed">
-                        Sharing this code allows your healthcare provider to view your medication adherence and vitality trends in real-time.
-                    </p>
-</div>
+<div id="caregiverSection" class="relative z-10"></div>
 <!-- Background Decorative Element -->
 <div class="absolute -right-12 -bottom-12 w-40 h-40 bg-secondary/5 rounded-full blur-3xl"></div>
 </section>
@@ -298,6 +284,12 @@ async function loadPatientSchedule() {
     const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
     const data = await res.json();
 
+    renderPatientGrid(data);
+updateNextDoseUI(data);
+    // ✅ NEW
+    updateGreeting();
+    updateProgress(data);
+
     console.log("Patient Schedule:", data);
 
     renderPatientGrid(data);
@@ -306,6 +298,195 @@ async function loadPatientSchedule() {
     console.error("Error loading patient schedule:", err);
   }
 }
+
+function calculateNextDose(data) {
+  const now = new Date();
+
+  let upcoming = [];
+
+  data.forEach(item => {
+    const dateTime = new Date(item.date + "T" + item.actualTime);
+
+    if (dateTime > now && item.status !== "TAKEN") {
+      upcoming.push({
+        ...item,
+        dateTime
+      });
+    }
+  });
+
+  if (upcoming.length === 0) return null;
+
+  // sort by nearest
+  upcoming.sort((a, b) => a.dateTime - b.dateTime);
+
+  return upcoming[0];
+}
+
+function formatTime(date) {
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+function updateNextDoseUI(data) {
+  const next = calculateNextDose(data);
+
+  const el = document.getElementById("nextDoseTime");
+
+  if (!next) {
+    el.innerText = "No upcoming";
+    return;
+  }
+
+  el.innerText = formatTime(next.dateTime);
+}
+function updateGreeting() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const name = user?.name || "there";
+
+  const hour = new Date().getHours();
+
+  let greeting = "Hello";
+
+  if (hour < 12) greeting = "Good morning";
+  else if (hour < 18) greeting = "Good afternoon";
+  else greeting = "Good evening";
+
+  document.getElementById("greetingText").innerText =
+    `${greeting}, ${name}.`;
+}
+
+function updateProgress(data) {
+  if (!data || data.length === 0) {
+    document.getElementById("progressText").innerText =
+      "No medication data available yet.";
+    return;
+  }
+
+  const total = data.length;
+  const taken = data.filter(item => item.status === "TAKEN").length;
+
+  const percentage = Math.round((taken / total) * 100);
+
+  let message = "";
+
+  if (percentage >= 80) {
+    message = `You're doing great. ${percentage}% of your weekly doses are on track.`;
+  } else if (percentage >= 50) {
+    message = `You're halfway there. ${percentage}% adherence this week.`;
+  } else {
+    message = `Let's improve. Only ${percentage}% adherence so far.`;
+  }
+
+  document.getElementById("progressText").innerText = message;
+}
+
+async function loadCaregiverSection() {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    const res = await fetch(`http://localhost:3000/api/patient/${user.id}/caregiver`);
+    const data = await res.json();
+
+    if (!data || !data.caregiver) {
+      renderNoCaregiver();
+    } else {
+      renderCaregiver(data.caregiver);
+    }
+
+  } catch (err) {
+    console.error(err);
+    renderNoCaregiver();
+  }
+}
+
+function renderCaregiver(caregiver) {
+  const section = document.getElementById("caregiverSection");
+
+  const date = new Date(caregiver.createdAt);
+  const formatted = date.toLocaleDateString("en-US", {
+    month: "short",
+    year: "numeric"
+  });
+
+  section.innerHTML = `
+    <h3 class="text-xl font-bold text-on-surface mb-6">My Caregiver</h3>
+
+    <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm mb-6">
+      
+      <img 
+        class="w-14 h-14 rounded-xl object-cover"
+        src="${caregiver.avatar || 'https://via.placeholder.com/100'}"
+      />
+
+      <div>
+        <p class="font-bold text-on-surface">${caregiver.name}</p>
+        
+        <p class="text-xs text-on-surface-variant">
+          Connected since ${formatted}
+        </p>
+
+        <div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-secondary uppercase tracking-tight">
+          <span class="material-symbols-outlined text-sm">verified</span>
+          ${caregiver.active ? "Active Monitoring" : "Inactive"}
+        </div>
+      </div>
+    </div>
+
+    <button 
+      onclick="shareCode()" 
+      class="w-full bg-surface-container-high text-on-surface font-semibold py-3 rounded-xl hover:bg-surface-variant transition-all active:scale-95 flex items-center justify-center gap-2 mb-4"
+    >
+      <span class="material-symbols-outlined text-lg">share</span> 
+      Share Connection Code
+    </button>
+
+    <p class="text-[11px] text-on-surface-variant text-center leading-relaxed">
+      Sharing this code allows your healthcare provider to view your medication adherence and vitality trends in real-time.
+    </p>
+  `;
+}
+function renderNoCaregiver() {
+  const section = document.getElementById("caregiverSection");
+
+  section.innerHTML = `
+    <h3 class="text-xl font-bold text-on-surface mb-6">My Caregiver</h3>
+
+    <div class="bg-surface-container-lowest p-6 rounded-2xl shadow-sm text-center">
+      
+      <p class="text-sm text-on-surface-variant mb-4">
+        No caregiver connected yet
+      </p>
+
+      <button 
+        onclick="shareCode()" 
+        class="w-full bg-primary text-white font-semibold py-3 rounded-xl hover:brightness-110 transition-all"
+      >
+        <span class="material-symbols-outlined text-lg align-middle">share</span>
+        Connect Caregiver
+      </button>
+
+      <p class="text-[11px] text-on-surface-variant mt-4 leading-relaxed">
+        Share your connection code with a caregiver to enable monitoring and support.
+      </p>
+
+    </div>
+  `;
+}
+function shareCode() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user || !user.pairingCode) {
+    alert("No pairing code found");
+    return;
+  }
+
+  navigator.clipboard.writeText(user.pairingCode);
+  alert("Pairing code copied!");
+}
+loadCaregiverSection();
 generatePatientHeader();
 loadPatientSchedule();
 
