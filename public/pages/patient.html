@@ -100,7 +100,9 @@
 
 </nav>
 <div class="flex items-center gap-4">
-
+<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 ease-in-out active:scale-95 text-slate-600">
+<span class="material-symbols-outlined">logout</span>
+</button>
 </div>
 </div>
 </header>
@@ -119,8 +121,8 @@
 </div>
 <div class="bg-primary-container text-on-primary-container px-6 py-4 rounded-xl flex items-center gap-4 shadow-sm">
 <div class="flex flex-col">
-<span class="text-xs font-semibold uppercase tracking-widest opacity-80">Next Dose</span>
-<span id="nextDoseTime" class="text-xl font-bold">--:--</span>
+<span class="text-xs font-semibold uppercase tracking-widest opacity-80">Last Dose</span>
+<span id="nextDoseTimeTop" class="text-xl font-bold">--:--</span>
 </div>
 <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
 <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">medication</span>
@@ -149,24 +151,48 @@
 </div>
 <div>
 <h4 class="font-bold text-on-surface leading-tight mb-1">Clinical Insight</h4>
-<p class="text-sm text-on-surface-variant leading-relaxed">
-                            Your consistency in the morning has improved by 12% this week. Maintaining this rhythm stabilizes your blood pressure.
-                        </p>
+
+<p id="clinicalInsightText" class="text-sm text-on-surface-variant leading-relaxed">
+  Analyzing your medication patterns...
+</p>
 </div>
 </div>
 </section>
 <!-- Quick Stats Card -->
 <section class="grid grid-cols-2 gap-4">
-<div class="bg-tertiary-container text-on-tertiary-container p-5 rounded-3xl">
-<span class="material-symbols-outlined mb-2">favorite</span>
-<p class="text-xs font-medium uppercase tracking-widest opacity-80">Resting BPM</p>
-<p class="text-2xl font-bold font-headline">72</p>
-</div>
-<div class="bg-secondary-fixed text-on-secondary-fixed p-5 rounded-3xl">
-<span class="material-symbols-outlined mb-2">water_drop</span>
-<p class="text-xs font-medium uppercase tracking-widest opacity-80">Hydration</p>
-<p class="text-2xl font-bold font-headline">1.2L</p>
-</div>
+
+  <!-- Adherence Today -->
+  <div class="bg-tertiary-container text-on-tertiary-container p-5 rounded-3xl">
+    <span class="material-symbols-outlined mb-2">monitoring</span>
+    <p class="text-xs font-medium uppercase tracking-widest opacity-80">
+      Adherence Today
+    </p>
+
+    <p id="adherenceValue" class="text-2xl font-bold font-headline">
+      --%
+    </p>
+
+    <p id="adherenceTrend" class="text-xs mt-1 opacity-80">
+      Loading...
+    </p>
+  </div>
+
+  <!-- Next Dose Countdown -->
+  <div class="bg-secondary-fixed text-on-secondary-fixed p-5 rounded-3xl">
+    <span class="material-symbols-outlined mb-2">schedule</span>
+    <p class="text-xs font-medium uppercase tracking-widest opacity-80">
+      Next Dose
+    </p>
+
+    <p id="nextDoseTime" class="text-2xl font-bold font-headline">
+      --:--
+    </p>
+
+    <p id="doseStatus" class="text-xs mt-1 opacity-80">
+      Checking schedule...
+    </p>
+  </div>
+
 </section>
 </div>
 </main>
@@ -281,7 +307,8 @@ async function loadPatientSchedule() {
       return;
     }
 
-    const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
+   // const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
+   const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
     const data = await res.json();
 
     renderPatientGrid(data);
@@ -293,7 +320,7 @@ updateNextDoseUI(data);
     console.log("Patient Schedule:", data);
 
     renderPatientGrid(data);
-
+    updateClinicalInsight(data);
   } catch (err) {
     console.error("Error loading patient schedule:", err);
   }
@@ -326,21 +353,46 @@ function calculateNextDose(data) {
 function formatTime(date) {
   return date.toLocaleTimeString([], {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    hour12: true // ✅ ensures AM/PM
   });
 }
 
+function calculateLastDose(data) {
+  const now = new Date();
+
+  let past = [];
+
+  data.forEach(item => {
+    const dateTime = new Date(item.date + "T" + item.actualTime);
+
+    // only past doses
+    if (dateTime <= now) {
+      past.push({
+        ...item,
+        dateTime
+      });
+    }
+  });
+
+  if (past.length === 0) return null;
+
+  // sort latest first
+  past.sort((a, b) => b.dateTime - a.dateTime);
+
+  return past[0];
+}
 function updateNextDoseUI(data) {
-  const next = calculateNextDose(data);
+  const last = calculateLastDose(data);
 
-  const el = document.getElementById("nextDoseTime");
+  const el = document.getElementById("nextDoseTimeTop");
 
-  if (!next) {
-    el.innerText = "No upcoming";
+  if (!last) {
+    el.innerText = "No history";
     return;
   }
 
-  el.innerText = formatTime(next.dateTime);
+  el.innerText = formatTime(last.dateTime);
 }
 function updateGreeting() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -387,8 +439,9 @@ async function loadCaregiverSection() {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-    const res = await fetch(`http://localhost:3000/api/patient/${user.id}/caregiver`);
-    const data = await res.json();
+   // const res = await fetch(`http://localhost:3000/api/patient/69f0492fd3c0a30b7f5fbb1e/caregivers`);
+     const res = await fetch(`http://localhost:3000/api/patient/${user.id}/caregivers`); 
+   const data = await res.json();
 
     if (!data || !data.caregiver) {
       renderNoCaregiver();
@@ -475,17 +528,232 @@ function renderNoCaregiver() {
     </div>
   `;
 }
-function shareCode() {
+
+async function shareCode() {
   const user = JSON.parse(localStorage.getItem("user"));
 
-  if (!user || !user.pairingCode) {
-    alert("No pairing code found");
+  if (!user || !user.id) {
+    alert("User not found");
     return;
   }
 
-  navigator.clipboard.writeText(user.pairingCode);
-  alert("Pairing code copied!");
+  try {
+    const res = await fetch(`http://localhost:3000/api/getcode/${user.id}`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+
+    const data = await res.json();
+
+    console.log("Fetched user:", data);
+
+    if (!data.pairingCode) {
+      alert("Pairing code not found");
+      return;
+    }
+
+    showCodeModal(data.pairingCode);
+
+  } catch (err) {
+    console.error("Error fetching pairing code:", err);
+    alert("Failed to load pairing code");
+  }
 }
+
+function showCodeModal(code) {
+  const modal = document.createElement("div");
+  modal.className = "fixed inset-0 bg-black/40 flex items-center justify-center z-50";
+
+  modal.innerHTML = `
+    <div class="bg-white rounded-2xl p-6 w-[320px] text-center shadow-xl">
+      
+      <h3 class="text-lg font-bold mb-2">Your Connection Code</h3>
+      
+      <p class="text-sm text-gray-500 mb-4">
+        Share this code with your caregiver
+      </p>
+
+      <div class="text-2xl font-mono font-bold bg-gray-100 py-3 rounded-lg mb-4">
+        ${code}
+      </div>
+
+      <button id="copyBtn"
+        class="w-full bg-primary text-white py-2 rounded-lg mb-2">
+        Copy Code
+      </button>
+
+      <button id="closeBtn"
+        class="w-full bg-gray-200 py-2 rounded-lg">
+        Close
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  document.getElementById("copyBtn").onclick = () => {
+    navigator.clipboard.writeText(code);
+    document.getElementById("copyBtn").innerText = "Copied!";
+  };
+
+  document.getElementById("closeBtn").onclick = () => modal.remove();
+
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+}
+
+function generateClinicalInsight(data) {
+  if (!data || data.length === 0) {
+    return "No medication data yet. Start taking your doses to unlock insights.";
+  }
+
+  const total = data.length;
+  const taken = data.filter(d => d.status === "TAKEN").length;
+  const missed = data.filter(d => d.status === "MISSED").length;
+
+  const adherence = Math.round((taken / total) * 100);
+
+  // Group by timeSlot
+  const slots = {
+    MORNING: { total: 0, taken: 0 },
+    MIDDAY: { total: 0, taken: 0 },
+    EVENING: { total: 0, taken: 0 }
+  };
+
+  data.forEach(d => {
+    if (!slots[d.timeSlot]) return;
+
+    slots[d.timeSlot].total++;
+    if (d.status === "TAKEN") {
+      slots[d.timeSlot].taken++;
+    }
+  });
+
+  // Find best performing slot
+  let bestSlot = null;
+  let bestRate = 0;
+
+  Object.keys(slots).forEach(slot => {
+    if (slots[slot].total === 0) return;
+
+    const rate = slots[slot].taken / slots[slot].total;
+
+    if (rate > bestRate) {
+      bestRate = rate;
+      bestSlot = slot;
+    }
+  });
+
+  // 🧠 Generate smart message
+  if (adherence >= 85) {
+    return `Excellent adherence (${adherence}%). Your ${bestSlot.toLowerCase()} routine is strong—keep it consistent for optimal results.`;
+  }
+
+  if (adherence >= 60) {
+    return `You're maintaining ${adherence}% adherence. Focus on improving your ${bestSlot === "MORNING" ? "later-day" : "morning"} doses for better stability.`;
+  }
+
+  if (missed > 0) {
+    return `You've missed ${missed} doses recently. Try setting reminders—consistency is key to effective treatment.`;
+  }
+
+  return `Your adherence is ${adherence}%. Let's build a stronger routine to improve your health outcomes.`;
+}
+function updateClinicalInsight(data) {
+  const text = generateClinicalInsight(data);
+
+  document.getElementById("clinicalInsightText").innerText = text;
+}
+
+function calculateAdherence(dosesTaken, totalDoses) {
+  if (totalDoses === 0) return 0;
+  return Math.round((dosesTaken / totalDoses) * 100);
+}
+function getTrend(today, yesterday) {
+  const diff = today - yesterday;
+
+  if (diff > 0) return `+${diff}% vs yesterday`;
+  if (diff < 0) return `${diff}% vs yesterday`;
+  return `No change`;
+}
+function getNextDose(schedule) {
+  const now = new Date();
+
+  const upcoming = schedule
+    .map(time => new Date(time))
+    .filter(t => t > now)
+    .sort((a, b) => a - b)[0];
+
+  return upcoming || null;
+}
+function formatTimeRemaining(targetTime) {
+  const now = new Date();
+  const diff = targetTime - now;
+
+  if (diff <= 0) return "Due now";
+
+  const totalSeconds = Math.floor(diff / 1000);
+
+  const hrs = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  const pad = (n) => String(n).padStart(2, "0");
+
+  if (hrs > 0) {
+    return `in ${pad(hrs)}:${pad(mins)}:${pad(secs)}`;
+  }
+
+  return `in ${pad(mins)}:${pad(secs)}`;
+}
+
+
+// Example data (replace with API)
+const todayTaken = 5;
+const todayTotal = 6;
+const yesterdayAdherence = 70;
+
+const schedule = [
+  "2026-04-27T15:00:00",
+  "2026-04-27T20:00:00"
+];
+
+// Adherence
+const adherence = calculateAdherence(todayTaken, todayTotal);
+document.getElementById("adherenceValue").innerText = `${adherence}%`;
+
+const trend = getTrend(adherence, yesterdayAdherence);
+document.getElementById("adherenceTrend").innerText = trend;
+
+// Color logic
+const trendEl = document.getElementById("adherenceTrend");
+if (adherence >= 90) trendEl.classList.add("text-green-500");
+else if (adherence >= 70) trendEl.classList.add("text-yellow-500");
+else trendEl.classList.add("text-red-500");
+
+// Next dose
+const nextDose = getNextDose(schedule);
+
+if (nextDose) {
+  document.getElementById("nextDoseTime").innerText =
+    formatTimeRemaining(nextDose);
+
+  document.getElementById("doseStatus").innerText = "Upcoming";
+} else {
+  document.getElementById("nextDoseTime").innerText = "None";
+  document.getElementById("doseStatus").innerText = "All doses completed";
+}
+
+setInterval(() => {
+  if (nextDose) {
+    document.getElementById("nextDoseTime").innerText =
+      formatTimeRemaining(nextDose);
+  }
+}, 1000);
+
+
 loadCaregiverSection();
 generatePatientHeader();
 loadPatientSchedule();

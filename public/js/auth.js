@@ -54,9 +54,9 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
     // ✅ Redirect based on role
     if (data.user.role === "PATIENT") {
-      window.location.href = "file:///Users/wajahathafeez/Desktop/Pillbox%20AR/public/pages/index.html";
+      window.location.href = "file:///Users/wajahathafeez/Pilldose/public/pages/index.html";
     } else {
-      window.location.href = "file:///Users/wajahathafeez/Desktop/Pillbox%20AR/public/pages/index.html";
+      window.location.href = "file:///Users/wajahathafeez/Pilldose/public/pages/index.html";
     }
 
   } catch (err) {

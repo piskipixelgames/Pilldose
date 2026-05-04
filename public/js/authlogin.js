@@ -34,9 +34,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
  localStorage.setItem("user", JSON.stringify(data.user));
  
     if (data.user.role === "PATIENT") {
-      window.location.href = "file:///Users/wajahathafeez/Desktop/Pillbox%20AR/public/pages/patient.html";
+      window.location.href = "file:///Users/wajahathafeez/Pilldose/public/pages/patient.html";
     } else {
-      window.location.href = "file:///Users/wajahathafeez/Desktop/Pillbox%20AR/public/pages/caregiver.html";
+      window.location.href = "file:///Users/wajahathafeez/Pilldose/public/pages/caregiver.html";
     }
 
 

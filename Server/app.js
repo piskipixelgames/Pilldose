@@ -27,6 +27,7 @@ app.post("/auth/login", auth.login);
 app.post("/api/pair", pairController.pairPatient);
 app.get("/api/caregiver/:caregiverId/patients", caregiverController.getPatientsForCaregiver);
 app.get("/api/patient/:patientId/caregivers", patientController.getCaregiversForPatient);
+app.get("/api/getcode/:id", patientController.getPairingCode);
 app.post("/api/schedule", scheduleController.createSchedule);
 app.get("/api/schedule/:patientId", scheduleController.getSchedulesForPatient);
 app.delete("/schedule/:id", scheduleController.deleteSchedule);

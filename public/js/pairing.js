@@ -56,7 +56,7 @@ connectBtn.addEventListener("click", async () => {
   // UI loading
   connectBtn.innerText = "Connecting...";
   connectBtn.disabled = true;
-const caregiverId = "69e36eb57cd37f357172fafc";
+const caregiverId = "69f1e6c45e464051447c6237";
 
   try {
     const res = await fetch("http://localhost:3000/api/pair", {
