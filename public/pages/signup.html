@@ -215,15 +215,25 @@
 </div>
 </div>
 <div class="flex flex-wrap gap-2">
-<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> 8+ Characters
-                                    </span>
-<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> One Number
-                                    </span>
-<span class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-<span class="material-symbols-outlined text-xs" data-icon="check_circle">check_circle</span> One Symbol
-                                    </span>
+
+  <span id="rule-length"
+    class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-xs">cancel</span>
+    8+ Characters
+  </span>
+
+  <span id="rule-number"
+    class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-xs">cancel</span>
+    One Number
+  </span>
+
+  <span id="rule-symbol"
+    class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
+    <span class="material-symbols-outlined text-xs">cancel</span>
+    One Symbol
+  </span>
+
 </div>
 </div>
 </section>
@@ -265,4 +275,46 @@
 </div>
 </footer>
 </body></html>
+<script>
+
+const passwordInput = document.getElementById("password");
+
+const rules = {
+  length: document.getElementById("rule-length"),
+  number: document.getElementById("rule-number"),
+  symbol: document.getElementById("rule-symbol"),
+};
+
+passwordInput.addEventListener("input", () => {
+  const value = passwordInput.value;
+
+  const checks = {
+    length: value.length >= 8,
+    number: /\d/.test(value),
+    symbol: /[!@#$%^&*(),.?":{}|<>]/.test(value),
+  };
+
+  updateRuleUI(rules.length, checks.length);
+  updateRuleUI(rules.number, checks.number);
+  updateRuleUI(rules.symbol, checks.symbol);
+});
+
+function updateRuleUI(element, isValid) {
+  const icon = element.querySelector("span");
+
+  if (isValid) {
+    element.classList.remove("bg-surface-container", "text-on-surface-variant");
+    element.classList.add("bg-secondary/10", "text-secondary");
+
+    icon.innerText = "check_circle";
+  } else {
+    element.classList.remove("bg-secondary/10", "text-secondary");
+    element.classList.add("bg-surface-container", "text-on-surface-variant");
+
+    icon.innerText = "cancel";
+  }
+}
+
+
+</script>
 <script src="../js/auth.js"></script>
