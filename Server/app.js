@@ -32,6 +32,7 @@ app.post("/api/schedule", scheduleController.createSchedule);
 app.get("/api/schedule/:patientId", scheduleController.getSchedulesForPatient);
 app.delete("/schedule/:id", scheduleController.deleteSchedule);
 app.get("/api/stats/:userId", statsController.getStats);
+app.use("/api/device-token", require("./controllers/deviceToken"));
 app.listen(process.env.PORT, () =>
   console.log("Server running on port " + process.env.PORT)
 );
