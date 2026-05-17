@@ -257,44 +257,99 @@ function renderPatientGrid(data) {
         item.date === formatted && item.timeSlot === slot
       );
 
-      container.innerHTML += createPatientCell(items);
+  container.innerHTML += createPatientCell(items, slot, formatted);
     }
   });
 }
-function createPatientCell(items) {
-  if (!items || items.length === 0) {
+const SLOT_TIME = {
+  MORNING: { start: 5, end: 11 },
+  MIDDAY: { start: 12, end: 17 },
+  EVENING: { start: 18, end: 23 }
+};
+
+function getCellState(items, slot, dateStr) {
+  const now = new Date();
+  const currentDate = now.toISOString().split("T")[0];
+  const hour = now.getHours();
+
+  const slotRange = SLOT_TIME[slot];
+
+  // safety guard (IMPORTANT)
+  if (!slotRange) return "UPCOMING";
+
+  const isTaken = items?.some(i => i.status === "TAKEN");
+
+  // FUTURE DATE
+  if (dateStr > currentDate) return "UPCOMING";
+
+  // PAST DATE
+  if (dateStr < currentDate) {
+    return isTaken ? "TAKEN" : "MISSED";
+  }
+
+  // TODAY → ACTIVE SLOT WINDOW
+  const inSlotWindow = hour >= slotRange.start && hour <= slotRange.end;
+
+  if (inSlotWindow) {
+    return isTaken ? "TAKEN" : "ACTIVE";
+  }
+
+  // TODAY BUT SLOT PASSED
+  if (hour > slotRange.end) {
+    return isTaken ? "TAKEN" : "MISSED";
+  }
+
+  return "UPCOMING";
+}
+
+function createPatientCell(items, slot, dateStr) {
+  const state = getCellState(items, slot, dateStr);
+
+  if (state === "MISSED") {
     return `
-      <div class="pill-grid-item bg-surface-container-low rounded-2xl flex items-center justify-center text-outline-variant">
-        <span class="material-symbols-outlined">radio_button_unchecked</span>
+      <div class="pill-grid-item bg-red-100 border-2 border-red-500 text-red-600 flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
+          cancel
+        </span>
       </div>
     `;
   }
 
-  // priority logic
-  let status = "PENDING";
-
-  if (items.some(i => i.status === "MISSED")) status = "MISSED";
-  else if (items.every(i => i.status === "TAKEN")) status = "TAKEN";
-
-  if (status === "TAKEN") {
+  if (state === "ACTIVE") {
     return `
-      <div class="pill-grid-item bg-secondary/10 border-2 border-secondary rounded-2xl flex items-center justify-center text-secondary">
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+      <div class="pill-grid-item bg-green-100 border-2 border-green-500 text-green-600 flex items-center justify-center animate-pulse">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
+        check_circle
+        </span>
       </div>
     `;
   }
 
-  if (status === "MISSED") {
+  if (state === "TAKEN") {
     return `
-      <div class="pill-grid-item bg-error/10 border-2 border-error rounded-2xl flex items-center justify-center text-error">
-        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cancel</span>
+      <div class="pill-grid-item bg-emerald-200 border-2 border-emerald-600 text-emerald-700 flex items-center justify-center">
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
+          check_circle
+        </span>
       </div>
     `;
   }
 
+  // 🟦 FIX: EXPLICIT UPCOMING STATE (THIS WAS MISSING)
+  if (state === "UPCOMING") {
+    return `
+      <div class="pill-grid-item bg-blue-100 border-2 border-blue-400 text-blue-600 flex items-center justify-center">
+        <span class="material-symbols-outlined">
+          schedule
+        </span>
+      </div>
+    `;
+  }
+
+  // fallback safety
   return `
-    <div class="pill-grid-item bg-primary/10 border-2 border-primary rounded-2xl flex items-center justify-center text-primary">
-      <span class="material-symbols-outlined">schedule</span>
+    <div class="pill-grid-item bg-slate-100 text-slate-400 flex items-center justify-center">
+      <span class="material-symbols-outlined">radio_button_unchecked</span>
     </div>
   `;
 }
@@ -308,7 +363,7 @@ async function loadPatientSchedule() {
     }
 
    // const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
-   const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
+   const res = await fetch(`http://localhost:3000/api/schedule/${user.id}`);
     const data = await res.json();
 
     renderPatientGrid(data);
@@ -439,13 +494,17 @@ async function loadCaregiverSection() {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
+  
+
    // const res = await fetch(`http://localhost:3000/api/patient/69f0492fd3c0a30b7f5fbb1e/caregivers`);
      const res = await fetch(`http://localhost:3000/api/patient/${user.id}/caregivers`); 
    const data = await res.json();
 
     if (!data || !data.caregiver) {
+      console.log("No Caregiver Rendered");
       renderNoCaregiver();
     } else {
+        console.log(" Caregiver Rendered");
       renderCaregiver(data.caregiver);
     }
 
