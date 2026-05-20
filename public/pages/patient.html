@@ -240,24 +240,79 @@ function generatePatientHeader() {
   }
 }
 function renderPatientGrid(data) {
-  const container = document.getElementById("patientGrid");
+
+  const container =
+    document.getElementById("patientGrid");
+
+  const header =
+    document.getElementById("patientGridHeader");
+
+  // ✅ NO SCHEDULE
+
+  if (!data || data.length === 0) {
+
+    container.innerHTML = `
+      <div class="col-span-7 bg-surface-container-lowest rounded-2xl p-8 text-center">
+        
+        <span class="material-symbols-outlined text-5xl text-outline mb-3">
+          medication
+        </span>
+
+        <h3 class="text-lg font-bold text-on-surface mb-2">
+          No Medication Schedule
+        </h3>
+
+        <p class="text-sm text-on-surface-variant">
+          Your caregiver has not assigned any medication schedule yet.
+        </p>
+
+      </div>
+    `;
+
+    // ✅ hide weekday header
+    header.style.display = "none";
+
+    return;
+  }
+
+  // ✅ show header again
+  header.style.display = "grid";
+
   container.innerHTML = "";
 
   const today = new Date();
-  const slots = ["MORNING", "MIDDAY", "EVENING"];
+
+  const slots = [
+    "MORNING",
+    "MIDDAY",
+    "EVENING"
+  ];
 
   slots.forEach(slot => {
+
     for (let i = 0; i < 7; i++) {
 
       const d = new Date();
-      d.setDate(today.getDate() + i);
-      const formatted = d.toISOString().split("T")[0];
 
-      const items = data.filter(item =>
-        item.date === formatted && item.timeSlot === slot
+      d.setDate(
+        today.getDate() + i
       );
 
-  container.innerHTML += createPatientCell(items, slot, formatted);
+      const formatted =
+        d.toISOString().split("T")[0];
+
+      const items =
+        data.filter(item =>
+          item.date === formatted &&
+          item.timeSlot === slot
+        );
+
+      container.innerHTML +=
+        createPatientCell(
+          items,
+          slot,
+          formatted
+        );
     }
   });
 }
@@ -303,6 +358,15 @@ function getCellState(items, slot, dateStr) {
 }
 
 function createPatientCell(items, slot, dateStr) {
+
+  // 🟦 NO SCHEDULE EXISTS → BLANK CELL ONLY
+  if (!items || items.length === 0) {
+    return `
+      <div class="pill-grid-item bg-transparent border border-surface-variant flex items-center justify-center">
+      </div>
+    `;
+  }
+
   const state = getCellState(items, slot, dateStr);
 
   if (state === "MISSED") {
@@ -319,7 +383,7 @@ function createPatientCell(items, slot, dateStr) {
     return `
       <div class="pill-grid-item bg-green-100 border-2 border-green-500 text-green-600 flex items-center justify-center animate-pulse">
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">
-        check_circle
+          check_circle
         </span>
       </div>
     `;
@@ -335,7 +399,7 @@ function createPatientCell(items, slot, dateStr) {
     `;
   }
 
-  // 🟦 FIX: EXPLICIT UPCOMING STATE (THIS WAS MISSING)
+  // 🟦 UPCOMING ONLY IF SCHEDULE EXISTS
   if (state === "UPCOMING") {
     return `
       <div class="pill-grid-item bg-blue-100 border-2 border-blue-400 text-blue-600 flex items-center justify-center">
@@ -346,11 +410,9 @@ function createPatientCell(items, slot, dateStr) {
     `;
   }
 
-  // fallback safety
+  // fallback
   return `
-    <div class="pill-grid-item bg-slate-100 text-slate-400 flex items-center justify-center">
-      <span class="material-symbols-outlined">radio_button_unchecked</span>
-    </div>
+    <div class="pill-grid-item bg-transparent"></div>
   `;
 }
 async function loadPatientSchedule() {
@@ -492,24 +554,58 @@ function updateProgress(data) {
 
 async function loadCaregiverSection() {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
 
-  
+    const user =
+      JSON.parse(
+        localStorage.getItem("user")
+      );
 
-   // const res = await fetch(`http://localhost:3000/api/patient/69f0492fd3c0a30b7f5fbb1e/caregivers`);
-     const res = await fetch(`http://localhost:3000/api/patient/${user.id}/caregivers`); 
-   const data = await res.json();
+    const res = await fetch(
+      `http://localhost:3000/api/patient/${user.id}/caregivers`
+    );
 
-    if (!data || !data.caregiver) {
-      console.log("No Caregiver Rendered");
+    const data =
+      await res.json();
+
+    console.log(data);
+
+    console.log(data.caregivers);
+
+    // ✅ No caregivers
+
+    if (
+      !data ||
+      !data.caregivers ||
+      data.caregivers.length === 0
+    ) {
+      console.log(
+        "No Caregiver Rendered"
+      );
+
       renderNoCaregiver();
-    } else {
-        console.log(" Caregiver Rendered");
-      renderCaregiver(data.caregiver);
+
+      return;
     }
 
+    // ✅ Latest caregiver entry
+
+    const caregiver =
+      data.caregivers[
+        data.caregivers.length - 1
+      ];
+
+    console.log(
+      "Latest Caregiver:"
+    );
+
+    console.log(caregiver);
+
+    renderCaregiver(caregiver);
+
   } catch (err) {
+
     console.error(err);
+
     renderNoCaregiver();
   }
 }
@@ -518,20 +614,35 @@ function renderCaregiver(caregiver) {
   const section = document.getElementById("caregiverSection");
 
   const date = new Date(caregiver.createdAt);
-  const formatted = date.toLocaleDateString("en-US", {
-    month: "short",
-    year: "numeric"
-  });
+ let formatted = "Recently";
+
+if (caregiver.createdAt) {
+
+  const date =
+    new Date(caregiver.createdAt);
+
+  if (!isNaN(date)) {
+
+    formatted =
+      date.toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          year: "numeric"
+        }
+      );
+  }
+}
 
   section.innerHTML = `
     <h3 class="text-xl font-bold text-on-surface mb-6">My Caregiver</h3>
 
     <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-2xl shadow-sm mb-6">
       
-      <img 
-        class="w-14 h-14 rounded-xl object-cover"
-        src="${caregiver.avatar || 'https://via.placeholder.com/100'}"
-      />
+     <img 
+  class="w-14 h-14 rounded-xl object-cover"
+  src="https://ui-avatars.com/api/?name=${encodeURIComponent(caregiver.name)}&background=6750A4&color=fff&size=128"
+/>
 
       <div>
         <p class="font-bold text-on-surface">${caregiver.name}</p>
@@ -542,7 +653,7 @@ function renderCaregiver(caregiver) {
 
         <div class="mt-1 flex items-center gap-1 text-[10px] font-bold text-secondary uppercase tracking-tight">
           <span class="material-symbols-outlined text-sm">verified</span>
-          ${caregiver.active ? "Active Monitoring" : "Inactive"}
+          ${caregiver.active ? "Active Monitoring" : "Active"}
         </div>
       </div>
     </div>

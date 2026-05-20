@@ -178,10 +178,10 @@
 <div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between border border-surface-container-high">
 <div class="flex items-center gap-6">
 <div class="flex flex-col">
-<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">Selected Patient</span>
+<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">Your Patient</span>
 <div class="flex items-center gap-2 cursor-pointer">
-<span id="patientName" class="text-lg font-bold text-on-surface">Loading...</span>
-<span class="material-symbols-outlined text-primary">expand_more</span>
+<span id="patientName" class="text-lg font-bold text-on-surface">Loading...</span>->
+
 </div>
 </div>
 <div class="h-8 w-px bg-outline-variant"></div>
@@ -271,10 +271,7 @@ async function loadStats() {
   try {
     const selectedPatient = JSON.parse(localStorage.getItem("selectedPatient"));
 
-  if (!selectedPatient) {
-    alert("No patient selected");
-    return [];
-  }
+  
 
     const res = await fetch(`http://localhost:3000/api/stats/${selectedPatient._id}`);
     const data = await res.json();
@@ -646,23 +643,27 @@ async function loadSchedule() {
 function mapScheduleToGrid(data) {
   schedule = {};
 
+  if (!Array.isArray(data)) return;
+
   const today = new Date();
-  today.setHours(0, 0, 0, 0); // 🔥 normalize
+  today.setHours(0,0,0,0);
 
   data.forEach(item => {
+    if (!item?.timeSlot || !item?.date) return;
+
+    const timeSlot = String(item.timeSlot).toUpperCase().trim();
+
     const itemDate = new Date(item.date);
-    itemDate.setHours(0, 0, 0, 0); // 🔥 normalize
+    itemDate.setHours(0,0,0,0);
 
-    const diffTime = itemDate.getTime() - today.getTime();
-    const dayOffset = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const diffDays = Math.floor((itemDate - today) / (1000 * 60 * 60 * 24));
 
-    if (dayOffset < 0 || dayOffset > 6) return;
+    // only allow 0–6 week range
+    if (diffDays < 0 || diffDays > 6) return;
 
-    const key = `${dayOffset}-${item.timeSlot}`;
+    const key = `${diffDays}-${timeSlot}`;
 
-    if (!schedule[key]) {
-      schedule[key] = [];
-    }
+    if (!schedule[key]) schedule[key] = [];
 
     schedule[key].push({
       _id: item._id,
@@ -672,10 +673,9 @@ function mapScheduleToGrid(data) {
     });
   });
 
-  // 🔥 IMPORTANT: render AFTER mapping
-  Object.keys(schedule).forEach(key => {
-    renderSlot(key);
-  });
+  Object.keys(schedule).forEach(renderSlot);
+
+  console.log("FIXED GRID:", schedule);
 }
 
 async function deleteMedicine(key, index) {
