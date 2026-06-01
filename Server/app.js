@@ -4,7 +4,7 @@ console.log("MONGO_URI:", process.env.MONGO_URI); // 👈 ADD THIS
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const path = require('path');
 const auth = require("./controllers/authController");
 const pairController = require("./controllers/pairController");
 const caregiverController = require("./controllers/caregiverController");
