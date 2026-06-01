@@ -13,9 +13,9 @@ const scheduleController = require("./controllers/scheduleController");
 const statsController = require("./controllers/statsController");
 const sendPushNotification =
   require("./utils/sendPushNotification");
-  app.use(express.static(path.join(__dirname, 'public')));
+  
 const app = express();
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
