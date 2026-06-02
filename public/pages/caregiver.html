@@ -302,7 +302,7 @@ async function publishSchedule() {
   }
 
   try {
-    const res = await fetch("https://pilldose.onrender.com//api/schedule", {
+    const res = await fetch("https://pilldose.onrender.com/api/schedule", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -366,7 +366,7 @@ async function loadPatients() {
   try {
     const user = JSON.parse(localStorage.getItem("user"));
 
-  const res = await fetch(`https://pilldose.onrender.com//api/caregiver/${user.id}/patients`);
+  const res = await fetch(`https://pilldose.onrender.com/api/caregiver/${user.id}/patients`);
     const data = await res.json();
 
     console.log("Patients:", data);
@@ -695,7 +695,7 @@ async function deleteMedicine(key, index) {
 
   // 3. Delete from backend
   try {
-    await fetch(`https://pilldose.onrender.com//schedule/${item._id}`, {
+    await fetch(`https://pilldose.onrender.com/schedule/${item._id}`, {
       method: "DELETE"
     });
 
