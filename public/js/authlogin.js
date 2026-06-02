@@ -9,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   console.log("Login request:", payload);
 
   try {
-    const res = await fetch("http://localhost:3000/auth/login", {
+    const res = await fetch(process.env.API_URL+"auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
