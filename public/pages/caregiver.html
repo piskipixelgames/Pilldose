@@ -643,39 +643,80 @@ async function loadSchedule() {
 function mapScheduleToGrid(data) {
   schedule = {};
 
-  if (!Array.isArray(data)) return;
+  if (!Array.isArray(data)) {
+    console.log("No array data");
+    return;
+  }
 
   const today = new Date();
-  today.setHours(0,0,0,0);
+  today.setHours(0, 0, 0, 0);
+
+  console.log("TODAY =", today);
 
   data.forEach(item => {
-    if (!item?.timeSlot || !item?.date) return;
+    console.log("RAW ITEM =", item);
 
-    const timeSlot = String(item.timeSlot).toUpperCase().trim();
+    if (!item.date || !item.timeSlot) return;
 
-    const itemDate = new Date(item.date);
+    // safe local parsing
+    const itemDate = new Date(item.date + "T00:00:00");
     itemDate.setHours(0,0,0,0);
 
-    const diffDays = Math.floor((itemDate - today) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.round(
+      (itemDate.getTime() - today.getTime()) /
+      (1000 * 60 * 60 * 24)
+    );
 
-    // only allow 0–6 week range
-    if (diffDays < 0 || diffDays > 6) return;
+    const timeSlot =
+      item.timeSlot
+        .toString()
+        .trim()
+        .toUpperCase();
 
     const key = `${diffDays}-${timeSlot}`;
 
-    if (!schedule[key]) schedule[key] = [];
+    console.log({
+      medicine: item.medicine,
+      dbDate: item.date,
+      parsedDate: itemDate,
+      diffDays,
+      timeSlot,
+      generatedKey: key
+    });
+
+    // skip outside visible week
+    if (diffDays < 0 || diffDays > 6) {
+      console.log("SKIPPED OUTSIDE WEEK");
+      return;
+    }
+
+    // verify slot exists
+    const slotExists =
+      document.getElementById(`slot-${key}`);
+
+    console.log(
+      `slot-${key}`,
+      slotExists ? "FOUND" : "NOT FOUND"
+    );
+
+    if (!schedule[key]) {
+      schedule[key] = [];
+    }
 
     schedule[key].push({
       _id: item._id,
       medicine: item.medicine,
-      time: item.actualTime,
-      status: item.status
+      time: item.actualTime || "",
+      status: item.status || "PENDING"
     });
   });
 
-  Object.keys(schedule).forEach(renderSlot);
+  console.log("FINAL SCHEDULE =", schedule);
 
-  console.log("FIXED GRID:", schedule);
+  Object.keys(schedule).forEach(key => {
+    console.log("Rendering", key);
+    renderSlot(key);
+  });
 }
 
 async function deleteMedicine(key, index) {
