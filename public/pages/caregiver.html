@@ -628,7 +628,7 @@ async function loadSchedule() {
 
     if (!selectedPatient) return;
 
-    const res = await fetch(`http://localhost:3000/api/schedule/${selectedPatient._id}`);
+    const res = await fetch(`https://pilldose.onrender.com/api/schedule/${selectedPatient._id}`);
     const data = await res.json();
 
     console.log("Loaded schedule:", data);
