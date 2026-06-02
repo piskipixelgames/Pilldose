@@ -425,7 +425,7 @@ async function loadPatientSchedule() {
     }
 
    // const res = await fetch(`http://localhost:3000/api/schedule/69e36aba7cd37f357172fafa`);
-   const res = await fetch(`http://localhost:3000/api/schedule/${user.id}`);
+   const res = await fetch(`https://pilldose.onrender.com/api/schedule/${user.id}`);
     const data = await res.json();
 
     renderPatientGrid(data);
@@ -561,7 +561,7 @@ async function loadCaregiverSection() {
       );
 
     const res = await fetch(
-      `http://localhost:3000/api/patient/${user.id}/caregivers`
+      ` https://pilldose.onrender.com/api/patient/${user.id}/caregivers`
     );
 
     const data =
@@ -708,7 +708,7 @@ async function shareCode() {
   }
 
   try {
-    const res = await fetch(`http://localhost:3000/api/getcode/${user.id}`, {
+    const res = await fetch(` https://pilldose.onrender.com/api/getcode/${user.id}`, {
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("token")}`
       }
