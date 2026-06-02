@@ -643,56 +643,61 @@ async function loadSchedule() {
 function mapScheduleToGrid(data) {
   schedule = {};
 
-  if (!Array.isArray(data)) return;
+  if (!Array.isArray(data)) {
+    console.log("No array data");
+    return;
+  }
 
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
-  // normalize today
-  const todayString =
-    today.getFullYear() + "-" +
-    String(today.getMonth() + 1).padStart(2, "0") + "-" +
-    String(today.getDate()).padStart(2, "0");
-
-  console.log("TODAY:", todayString);
+  console.log("TODAY =", today);
 
   data.forEach(item => {
-    if (!item?.date || !item?.timeSlot) return;
+    console.log("RAW ITEM =", item);
 
-    console.log("DB ITEM:", item);
+    if (!item.date || !item.timeSlot) return;
 
-    // DB date
-    const dbDate = item.date.split("T")[0];
-
-    // difference in days using pure calendar date
-    const start = new Date(todayString);
-    const end = new Date(dbDate);
+    // safe local parsing
+    const itemDate = new Date(item.date + "T00:00:00");
+    itemDate.setHours(0,0,0,0);
 
     const diffDays = Math.round(
-      (end - start) / (1000 * 60 * 60 * 24)
+      (itemDate.getTime() - today.getTime()) /
+      (1000 * 60 * 60 * 24)
     );
 
     const timeSlot =
-      item.timeSlot.trim().toUpperCase();
+      item.timeSlot
+        .toString()
+        .trim()
+        .toUpperCase();
 
-    console.log(
-      "Medicine:",
-      item.medicine,
-      "Date:",
-      dbDate,
-      "Diff:",
+    const key = `${diffDays}-${timeSlot}`;
+
+    console.log({
+      medicine: item.medicine,
+      dbDate: item.date,
+      parsedDate: itemDate,
       diffDays,
-      "Slot:",
-      timeSlot
-    );
+      timeSlot,
+      generatedKey: key
+    });
 
+    // skip outside visible week
     if (diffDays < 0 || diffDays > 6) {
       console.log("SKIPPED OUTSIDE WEEK");
       return;
     }
 
-    const key = `${diffDays}-${timeSlot}`;
+    // verify slot exists
+    const slotExists =
+      document.getElementById(`slot-${key}`);
 
-    console.log("MAPPED →", key);
+    console.log(
+      `slot-${key}`,
+      slotExists ? "FOUND" : "NOT FOUND"
+    );
 
     if (!schedule[key]) {
       schedule[key] = [];
@@ -706,9 +711,12 @@ function mapScheduleToGrid(data) {
     });
   });
 
-  console.log("FINAL GRID", schedule);
+  console.log("FINAL SCHEDULE =", schedule);
 
-  Object.keys(schedule).forEach(renderSlot);
+  Object.keys(schedule).forEach(key => {
+    console.log("Rendering", key);
+    renderSlot(key);
+  });
 }
 
 async function deleteMedicine(key, index) {
