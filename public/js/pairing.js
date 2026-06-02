@@ -61,7 +61,7 @@ connectBtn.addEventListener("click", async () => {
 const caregiverId = user.id;
 console.log("CAREGIVERID :"+user.id);
   try {
-    const res = await fetch("http://localhost:3000/api/pair", {
+    const res = await fetch("https://pilldose.onrender.com/api/pair", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

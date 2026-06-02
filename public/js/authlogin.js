@@ -9,7 +9,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   console.log("Login request:", payload);
 
   try {
-    const res = await fetch(process.env.API_URL+"auth/login", {
+    const res = await fetch("https://pilldose.onrender.com/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -29,7 +29,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   console.log("Sending signup data:", payload);
 
   try {
-    const res = await fetch("http://localhost:3000/auth/register", { // 👈 replace PORT
+    const res = await fetch(" https://pilldose.onrender.com/auth/register", { // 👈 replace PORT
       method: "POST",
       headers: {
         "Content-Type": "application/json"
