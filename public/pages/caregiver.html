@@ -645,74 +645,37 @@ function mapScheduleToGrid(data) {
 
   if (!Array.isArray(data)) return;
 
-  console.log("RAW API SCHEDULE", data);
-
-  // today in local format
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  today.setHours(0,0,0,0);
 
-  for (let i = 0; i < data.length; i++) {
-    const item = data[i];
+  data.forEach(item => {
+    if (!item?.timeSlot || !item?.date) return;
 
-    if (!item?.date || !item?.timeSlot) continue;
+    const timeSlot = String(item.timeSlot).toUpperCase().trim();
 
-    // force safe local date parsing
-    const itemDate = new Date(item.date + "T00:00:00");
+    const itemDate = new Date(item.date);
+    itemDate.setHours(0,0,0,0);
 
-    itemDate.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((itemDate - today) / (1000 * 60 * 60 * 24));
 
-    const diffDays = Math.round(
-      (itemDate.getTime() - today.getTime()) /
-      (1000 * 60 * 60 * 24)
-    );
-
-    const timeSlot =
-      item.timeSlot.toUpperCase().trim();
-
-    console.log(
-      "Medicine:",
-      item.medicine,
-      "Date:",
-      item.date,
-      "Diff:",
-      diffDays,
-      "Slot:",
-      timeSlot
-    );
-
-    // only current week
-    if (diffDays < 0 || diffDays > 6) {
-      console.log("Skipped");
-      continue;
-    }
+    // only allow 0–6 week range
+    if (diffDays < 0 || diffDays > 6) return;
 
     const key = `${diffDays}-${timeSlot}`;
 
-    if (!schedule[key]) {
-      schedule[key] = [];
-    }
+    if (!schedule[key]) schedule[key] = [];
 
     schedule[key].push({
       _id: item._id,
       medicine: item.medicine,
-      time: item.actualTime || "",
-      status: item.status || "PENDING"
+      time: item.actualTime,
+      status: item.status
     });
-
-    console.log(
-      "Mapped:",
-      item.medicine,
-      "→",
-      key
-    );
-  }
-
-  // render
-  Object.keys(schedule).forEach(key => {
-    renderSlot(key);
   });
 
-  console.log("FINAL GRID:", schedule);
+  Object.keys(schedule).forEach(renderSlot);
+
+  console.log("FIXED GRID:", schedule);
 }
 
 async function deleteMedicine(key, index) {
