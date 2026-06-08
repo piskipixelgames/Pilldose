@@ -359,40 +359,7 @@ function getCellState(items, slot, dateStr) {
 */
 
 
-function getCellState(items) {
 
-  if (!items || items.length === 0)
-    return "EMPTY";
-
-  const now = new Date();
-
-  const earliestDose = items
-    .map(item =>
-      new Date(
-        `${item.date}T${item.actualTime}`
-      )
-    )
-    .sort((a,b) => a - b)[0];
-
-  const diffMinutes =
-    (earliestDose - now) / 60000;
-
-  // Current medication window
-  if (
-    diffMinutes >= -30 &&
-    diffMinutes <= 30
-  ) {
-    return "ACTIVE";
-  }
-
-  // Medication time passed
-  if (diffMinutes < -30) {
-    return "MISSED";
-  }
-
-  // Future medication
-  return "UPCOMING";
-}
 function createPatientCell(items, slot, dateStr) {
 
   // 🟦 NO SCHEDULE EXISTS → BLANK CELL ONLY
