@@ -323,35 +323,37 @@ const SLOT_TIME = {
 };
 
 function getCellState(items, slot, dateStr) {
+
   const now = new Date();
-  const currentDate = now.toISOString().split("T")[0];
-  const hour = now.getHours();
 
-  const slotRange = SLOT_TIME[slot];
+  const isTaken =
+    items.some(i => i.status === "TAKEN");
 
-  // safety guard (IMPORTANT)
-  if (!slotRange) return "UPCOMING";
-
-  const isTaken = items?.some(i => i.status === "TAKEN");
-
-  // FUTURE DATE
-  if (dateStr > currentDate) return "UPCOMING";
-
-  // PAST DATE
-  if (dateStr < currentDate) {
-    return isTaken ? "TAKEN" : "MISSED";
+  // Any dose taken
+  if (isTaken) {
+    return "TAKEN";
   }
 
-  // TODAY → ACTIVE SLOT WINDOW
-  const inSlotWindow = hour >= slotRange.start && hour <= slotRange.end;
+  // Find earliest scheduled medication
+  const earliestDose = items
+    .map(i => new Date(`${i.date}T${i.actualTime || i.time}`))
+    .sort((a,b) => a - b)[0];
 
-  if (inSlotWindow) {
-    return isTaken ? "TAKEN" : "ACTIVE";
+  if (!earliestDose) {
+    return "UPCOMING";
   }
 
-  // TODAY BUT SLOT PASSED
-  if (hour > slotRange.end) {
-    return isTaken ? "TAKEN" : "MISSED";
+  const diffMinutes =
+    (earliestDose - now) / (1000 * 60);
+
+  // Due now (30 minute window)
+  if (diffMinutes <= 30 && diffMinutes >= -30) {
+    return "ACTIVE";
+  }
+
+  // Scheduled time already passed
+  if (earliestDose < now) {
+    return "MISSED";
   }
 
   return "UPCOMING";
