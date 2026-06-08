@@ -323,40 +323,52 @@ const SLOT_TIME = {
 };
 
 function getCellState(items, slot, dateStr) {
+
   const now = new Date();
-  const currentDate = now.toISOString().split("T")[0];
-  const hour = now.getHours();
 
-  const slotRange = SLOT_TIME[slot];
+  const today =
+    now.toISOString().split("T")[0];
 
-  // safety guard (IMPORTANT)
-  if (!slotRange) return "UPCOMING";
+  const hour =
+    now.getHours();
 
-  const isTaken = items?.some(i => i.status === "TAKEN");
+  const slotRange =
+    SLOT_TIME[slot];
 
-  // FUTURE DATE
-  if (dateStr > currentDate) return "UPCOMING";
+  if (!slotRange)
+    return "UPCOMING";
 
-  // PAST DATE
-  if (dateStr < currentDate) {
-    return isTaken ? "TAKEN" : "MISSED";
-  }
+  const isTaken =
+    items.some(i => i.status === "TAKEN");
 
-  // TODAY → ACTIVE SLOT WINDOW
-  const inSlotWindow = hour >= slotRange.start && hour <= slotRange.end;
+  // TAKEN always wins
+  if (isTaken)
+    return "TAKEN";
 
-  if (inSlotWindow) {
-    return isTaken ? "TAKEN" : "ACTIVE";
-  }
+  // FUTURE DAYS
+  if (dateStr > today)
+    return "UPCOMING";
 
-  // TODAY BUT SLOT PASSED
-  if (hour > slotRange.end) {
-    return isTaken ? "TAKEN" : "MISSED";
-  }
+  // PAST DAYS
+  if (dateStr < today)
+    return "MISSED";
 
-  return "UPCOMING";
+  // ===== TODAY ONLY =====
+
+  // BEFORE SLOT
+  if (hour < slotRange.start)
+    return "UPCOMING";
+
+  // DURING SLOT
+  if (
+    hour >= slotRange.start &&
+    hour <= slotRange.end
+  )
+    return "ACTIVE";
+
+  // AFTER SLOT
+  return "MISSED";
 }
-
 function createPatientCell(items, slot, dateStr) {
 
   // 🟦 NO SCHEDULE EXISTS → BLANK CELL ONLY
