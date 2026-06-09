@@ -849,30 +849,6 @@ function updateClinicalInsight(data) {
   document.getElementById("clinicalInsightText").innerText = text;
 }
 
-function calculateTodayAdherence(data) {
-
-  const today =
-    new Date().toISOString().split("T")[0];
-
-  const todayDoses =
-    data.filter(d => d.date === today);
-
-  const total =
-    todayDoses.length;
-
-  const taken =
-    todayDoses.filter(
-      d => d.status === "TAKEN"
-    ).length;
-
-  if (total === 0)
-    return 0;
-
-  return Math.round(
-    (taken / total) * 100
-  );
-}
-
 function calculateAdherence(dosesTaken, totalDoses) {
   if (totalDoses === 0) return 0;
   return Math.round((dosesTaken / totalDoses) * 100);
@@ -927,9 +903,7 @@ const schedule = [
 ];
 
 // Adherence
-const adherence = calculateTodayAdherence(todayTaken, todayTotal);
-
-
+const adherence = calculateAdherence(todayTaken, todayTotal);
 document.getElementById("adherenceValue").innerText = `${adherence}%`;
 
 const trend = getTrend(adherence, yesterdayAdherence);
