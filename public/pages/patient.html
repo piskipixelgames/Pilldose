@@ -100,8 +100,11 @@
 
 </nav>
 <div class="flex items-center gap-4">
-<button class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 ease-in-out active:scale-95 text-slate-600">
-<span class="material-symbols-outlined">logout</span>
+<button
+  onclick="logout()"
+  class="p-2 rounded-full hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all duration-300 ease-in-out active:scale-95 text-slate-600"
+>
+  <span class="material-symbols-outlined">logout</span>
 </button>
 </div>
 </div>
@@ -218,7 +221,13 @@
 
 
 <script>
+const user = JSON.parse(
+  localStorage.getItem("user")
+);
 
+if (!user) {
+  window.location.href = "index.html";
+}
 
 function generatePatientHeader() {
   const container = document.getElementById("patientGridHeader");
@@ -935,6 +944,25 @@ setInterval(() => {
   }
 }, 1000);
 
+function logout() {
+
+  const confirmed = confirm(
+    "Are you sure you want to logout?"
+  );
+
+  if (!confirmed) return;
+
+  // Remove all stored user data
+  localStorage.removeItem("user");
+  localStorage.removeItem("selectedPatient");
+
+  // If you store tokens
+  localStorage.removeItem("token");
+  localStorage.removeItem("authToken");
+
+  // Redirect to login page
+  window.location.href = "index.html";
+}
 
 loadCaregiverSection();
 generatePatientHeader();
