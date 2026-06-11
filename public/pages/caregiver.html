@@ -260,7 +260,6 @@
 </div>
 </div>
 <script>
-  
   const user = JSON.parse(localStorage.getItem("user"));
 
 if (user) {
@@ -269,11 +268,7 @@ if (user) {
 document.getElementById("profileName").innerText = user.name;
 document.getElementById("profileNameStep").innerText = user.name;
 }
-if (!user) {
 
-  window.location.href = "index.html";
-
-}
 
 async function loadStats() {
   try {
@@ -770,25 +765,7 @@ function generateDateRange() {
   document.getElementById("dateRange").innerText =
     `${startStr} - ${endStr}`;
 }
-function logout() {
 
-  const confirmed = confirm(
-    "Are you sure you want to logout?"
-  );
-
-  if (!confirmed) return;
-
-  // Remove all stored user data
-  localStorage.removeItem("user");
-  localStorage.removeItem("selectedPatient");
-
-  // If you store tokens
-  localStorage.removeItem("token");
-  localStorage.removeItem("authToken");
-
-  // Redirect to login page
-  window.location.href = "index.html";
-}
 // INIT
 generateHeader();
 generateGrid();
