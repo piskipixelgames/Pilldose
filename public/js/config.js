@@ -1,3 +1,3 @@
 window.APP_CONFIG = {
-    LANGUAGE: "es"
+    LANGUAGE: "eu"
 };
