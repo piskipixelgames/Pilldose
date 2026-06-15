@@ -3,7 +3,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Sign Up | Pill Dose</title>
+<title id="pageTitle">Sign Up | Pill Dose</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -108,11 +108,11 @@
 <!-- Left Side: Editorial Content -->
 <div class="lg:col-span-5 space-y-8">
 <div class="space-y-4">
-<span class="text-secondary font-bold tracking-widest text-xs uppercase">Begin Your Journey</span>
-<h1 class="text-5xl font-extrabold text-on-surface leading-tight tracking-tight">
+<span id="beginJourney" class="text-secondary font-bold tracking-widest text-xs uppercase">Begin Your Journey</span>
+<h1 id="heading" class="text-5xl font-extrabold text-on-surface leading-tight tracking-tight">
                        Smart Patient <span class="text-primary">Medication Management.</span>
 </h1>
-<p class="text-lg text-on-surface-variant leading-relaxed max-w-md">
+<p id="description" class="text-lg text-on-surface-variant leading-relaxed max-w-md">
                          Manage and monitor medication effortlessly. Patients take doses with guided AR, while caregivers stay informed in real-time — ensuring better adherence and peace of mind.
                     </p>
 </div>
@@ -123,8 +123,8 @@
 <span class="material-symbols-outlined" data-icon="security" style="font-variation-settings: 'FILL' 1;">security</span>
 </div>
 <div>
-<h3 class="font-bold text-on-surface">HIPAA Compliant</h3>
-<p class="text-sm text-on-surface-variant">Your privacy is our baseline. Data encrypted at every touchpoint.</p>
+<h3 id="hipaaTitle" class="font-bold text-on-surface">HIPAA Compliant</h3>
+<p id="hipaaDesc" class="text-sm text-on-surface-variant">Your privacy is our baseline. Data encrypted at every touchpoint.</p>
 </div>
 </div>
 <div class="bg-secondary-container/20 p-6 rounded-xl flex gap-4 items-start">
@@ -132,8 +132,8 @@
 <span class="material-symbols-outlined" data-icon="clinical_notes" style="font-variation-settings: 'FILL' 1;">clinical_notes</span>
 </div>
 <div>
-<h3 class="font-bold text-on-surface">Precision Insights</h3>
-<p class="text-sm text-on-surface-variant">Sophisticated tonal layering for clear clinical visualization.</p>
+<h3 id="insightsTitle" class="font-bold text-on-surface">Precision Insights</h3>
+<p id="insightsDesc" class="text-sm text-on-surface-variant">Sophisticated tonal layering for clear clinical visualization.</p>
 </div>
 </div>
 </div>
@@ -150,15 +150,15 @@
 <section class="space-y-6">
 <div class="flex items-center gap-4">
 <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">1</span>
-<h2 class="text-2xl font-bold tracking-tight">Personal Information</h2>
+<h2 id="personalInfo" class="text-2xl font-bold tracking-tight">Personal Information</h2>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 <div class="space-y-1">
-<label class="text-xs font-semibold text-on-surface-variant ml-1">Full Name</label>
+<label id="fullNameLabel" class="text-xs font-semibold text-on-surface-variant ml-1">Full Name</label>
 <input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary transition-colors py-3 px-4 outline-none rounded-t-lg" placeholder="Dr. Julian Sterling" id="name" name="name" type="text"/>
 </div>
 <div class="space-y-1">
-<label class="text-xs font-semibold text-on-surface-variant ml-1">Email Address</label>
+<label id="emailAddressLabel" class="text-xs font-semibold text-on-surface-variant ml-1">Email Address</label>
 <input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary transition-colors py-3 px-4 outline-none rounded-t-lg" placeholder="julian@clinicalatelier.com" id="email" name="email" type="email"/>
 </div>
 </div>
@@ -167,7 +167,7 @@
 <section class="space-y-6">
 <div class="flex items-center gap-4">
 <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">2</span>
-<h2 class="text-2xl font-bold tracking-tight">Profile Type</h2>
+<h2 id="profileType" class="text-2xl font-bold tracking-tight">Profile Type</h2>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 <!-- Patient Option -->
@@ -180,8 +180,8 @@
 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
 </div>
 </div>
-<h3 class="font-bold text-lg">Patient</h3>
-<p class="text-sm text-on-surface-variant">I am seeking care and managing my own health records.</p>
+<h3 id="patientTitle" class="font-bold text-lg">Patient</h3>
+<p id="patientDesc" class="text-sm text-on-surface-variant">I am seeking care and managing my own health records.</p>
 </div>
 </label>
 <!-- Caregiver Option -->
@@ -194,8 +194,8 @@
 <div class="w-2 h-2 rounded-full bg-white opacity-0 peer-checked:opacity-100 transition-opacity"></div>
 </div>
 </div>
-<h3 class="font-bold text-lg">Caregiver</h3>
-<p class="text-sm text-on-surface-variant">I am a healthcare advocate managing care for others.</p>
+<h3 id="caregiverTitle" class="font-bold text-lg">Caregiver</h3>
+<p id="caregiverDesc" class="text-sm text-on-surface-variant">I am a healthcare advocate managing care for others.</p>
 </div>
 </label>
 </div>
@@ -204,11 +204,11 @@
 <section class="space-y-6">
 <div class="flex items-center gap-4">
 <span class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-sm">3</span>
-<h2 class="text-2xl font-bold tracking-tight">Account Security</h2>
+<h2 id="accountSecurity" class="text-2xl font-bold tracking-tight">Account Security</h2>
 </div>
 <div class="space-y-6">
 <div class="space-y-1">
-<label class="text-xs font-semibold text-on-surface-variant ml-1">Create Password</label>
+<label id="createPassword" class="text-xs font-semibold text-on-surface-variant ml-1">Create Password</label>
 <div class="relative">
 <input class="w-full bg-surface-container-low border-b-2 border-outline-variant focus:border-primary transition-colors py-3 px-4 outline-none rounded-t-lg" placeholder="••••••••••••" id="password" name="password" type="password"/>
 <button class="absolute right-4 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="visibility" type="button">visibility</button>
@@ -218,19 +218,19 @@
 
   <span id="rule-length"
     class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-    <span class="material-symbols-outlined text-xs">cancel</span>
+    <span id="rule-length-text" class="material-symbols-outlined text-xs">cancel</span>
     8+ Characters
   </span>
 
   <span id="rule-number"
     class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-    <span class="material-symbols-outlined text-xs">cancel</span>
+    <span id="rule-number-text" class="material-symbols-outlined text-xs">cancel</span>
     One Number
   </span>
 
   <span id="rule-symbol"
     class="px-3 py-1 bg-surface-container rounded-full text-[10px] font-bold text-on-surface-variant flex items-center gap-1">
-    <span class="material-symbols-outlined text-xs">cancel</span>
+    <span id="rule-symbol-text" class="material-symbols-outlined text-xs">cancel</span>
     One Symbol
   </span>
 
@@ -241,15 +241,15 @@
 <div class="pt-6 border-t border-surface-container space-y-6">
 <div class="flex items-center gap-3">
 <input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
-<label class="text-sm text-on-surface-variant" for="terms">
+<label id="termsLabel" class="text-sm text-on-surface-variant" for="terms">
                                     I agree to the <a class="text-primary font-semibold hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-semibold hover:underline" href="#">HIPAA Privacy Policy</a>.
                                 </label>
 </div>
-<button class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-lg rounded-lg shadow-lg shadow-primary/20 hover:brightness-105 active:scale-[0.98] transition-all" type="submit">
+<button id="completeSignupBtn" class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-lg rounded-lg shadow-lg shadow-primary/20 hover:brightness-105 active:scale-[0.98] transition-all" type="submit">
                                 Complete Sign Up
                             </button>
-<p class="text-center text-sm text-on-surface-variant">
-                                Already have an account? <a class="text-primary font-bold hover:underline" href="#">Log In</a>
+<p id="alreadyAccount" class="text-center text-sm text-on-surface-variant">
+                                Already have an account? <a id="loginLink" class="text-primary font-bold hover:underline" href="#">Log In</a>
 </p>
 </div>
 </form>
@@ -264,12 +264,12 @@
                 Pill Dose .
             </div>
 <div class="flex flex-wrap justify-center gap-6">
-<a class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Privacy Policy</a>
-<a class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Terms of Service</a>
-<a class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">HIPAA Compliance</a>
-<a class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Accessibility</a>
+<a id="privacyPolicyLink" class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Privacy Policy</a>
+<a id="termsLink" class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Terms of Service</a>
+<a id="hipaaComplianceLink" class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">HIPAA Compliance</a>
+<a  id="accessibilityLink" class="font-inter text-sm text-slate-500 hover:text-blue-600 hover:underline transition-all" href="#">Accessibility</a>
 </div>
-<p class="font-inter text-sm text-slate-600 dark:text-slate-400 opacity-80">
+<p id="footerText" class="font-inter text-sm text-slate-600 dark:text-slate-400 opacity-80">
                 © 2024 The Pill Dose. Empathetic Precision in Healthcare.
             </p>
 </div>
