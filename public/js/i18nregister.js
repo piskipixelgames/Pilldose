@@ -1,79 +1,99 @@
+function applyTranslations() {
 
+    const lang =
+        window.APP_CONFIG?.LANGUAGE || "en";
 
-  document.addEventListener("DOMContentLoaded", () => {
+    const t =
+        translations[lang] || translations.en;
 
-  document.title = t.pageTitle;
+    document.title = t.pageTitle;
 
-  document.getElementById("beginJourney").textContent = t.beginJourney;
+    document.getElementById("beginJourney").innerText =
+        t.beginJourney;
 
-  document.getElementById("heading").textContent = t.heading;
+    document.getElementById("heading").innerText =
+        t.heading;
 
-  document.getElementById("description").textContent = t.description;
+    document.getElementById("description").innerText =
+        t.description;
 
-  document.getElementById("hipaaTitle").textContent = t.hipaaTitle;
+    document.getElementById("hipaaTitle").innerText =
+        t.hipaaTitle;
 
-  document.getElementById("hipaaDesc").textContent = t.hipaaDesc;
+    document.getElementById("hipaaDesc").innerText =
+        t.hipaaDesc;
 
-  document.getElementById("insightsTitle").textContent = t.insightsTitle;
+    document.getElementById("insightsTitle").innerText =
+        t.insightsTitle;
 
-  document.getElementById("insightsDesc").textContent = t.insightsDesc;
+    document.getElementById("insightsDesc").innerText =
+        t.insightsDesc;
 
-  document.getElementById("personalInfo").textContent = t.personalInfo;
+    document.getElementById("personalInfo").innerText =
+        t.personalInfo;
 
-  document.getElementById("fullNameLabel").textContent = t.fullName;
+    document.getElementById("fullNameLabel").innerText =
+        t.fullName;
 
-  document.getElementById("emailAddressLabel").textContent = t.emailAddress;
+    document.getElementById("emailAddressLabel").innerText =
+        t.emailAddress;
 
-  document.getElementById("profileType").textContent = t.profileType;
+    document.getElementById("profileType").innerText =
+        t.profileType;
 
-  document.getElementById("patientTitle").textContent = t.patient;
+    document.getElementById("patientTitle").innerText =
+        t.patient;
 
-  document.getElementById("patientDesc").textContent = t.patientDesc;
+    document.getElementById("patientDesc").innerText =
+        t.patientDesc;
 
-  document.getElementById("caregiverTitle").textContent = t.caregiver;
+    document.getElementById("caregiverTitle").innerText =
+        t.caregiver;
 
-  document.getElementById("caregiverDesc").textContent = t.caregiverDesc;
+    document.getElementById("caregiverDesc").innerText =
+        t.caregiverDesc;
 
-  document.getElementById("accountSecurity").textContent = t.accountSecurity;
+    document.getElementById("accountSecurity").innerText =
+        t.accountSecurity;
 
-  document.getElementById("createPassword").textContent = t.createPassword;
+    document.getElementById("createPassword").innerText =
+        t.createPassword;
 
-  document.getElementById("rule-length-text").textContent = t.ruleLength;
+    document.getElementById("rule-length-text").innerText =
+        t.ruleLength;
 
-  document.getElementById("rule-number-text").textContent = t.ruleNumber;
+    document.getElementById("rule-number-text").innerText =
+        t.ruleNumber;
 
-  document.getElementById("rule-symbol-text").textContent = t.ruleSymbol;
+    document.getElementById("rule-symbol-text").innerText =
+        t.ruleSymbol;
 
-  document.getElementById("completeSignupBtn").textContent =
+    document.getElementById("completeSignupBtn").innerText =
+        t.completeSignup;
 
-    t.completeSignup;
+    document.getElementById("alreadyAccount").innerText =
+        t.alreadyAccount;
 
-  document.getElementById("alreadyAccount").textContent =
+    document.getElementById("loginLink").innerText =
+        t.login;
 
-    t.alreadyAccount;
+    document.getElementById("privacyPolicyLink").innerText =
+        t.privacyPolicy;
 
-  document.getElementById("loginLink").textContent =
+    document.getElementById("termsLink").innerText =
+        t.terms;
 
-    t.login;
+    document.getElementById("hipaaComplianceLink").innerText =
+        t.hipaaCompliance;
 
-  document.getElementById("privacyPolicyLink").textContent =
+    document.getElementById("accessibilityLink").innerText =
+        t.accessibility;
 
-    t.privacyPolicy;
+    document.getElementById("footerText").innerText =
+        t.footer;
+}
 
-  document.getElementById("termsLink").textContent =
-
-    t.terms;
-
-  document.getElementById("hipaaComplianceLink").textContent =
-
-    t.hipaaCompliance;
-
-  document.getElementById("accessibilityLink").textContent =
-
-    t.accessibility;
-
-  document.getElementById("footerText").textContent =
-
-    t.footer;
-
-});
+document.addEventListener(
+    "DOMContentLoaded",
+    applyTranslations
+);
