@@ -4,7 +4,7 @@
 <html class="light" lang="en"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Login | Pill Dose</title>
+<title id="pageTitle">Login | Pill Dose</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
@@ -120,11 +120,11 @@
 <img class="w-full h-full object-cover" data-alt="abstract medical scientific visualization with soft blue microscopic patterns and clean clinical laboratory aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFbwS3JD5jJforQITHwLJtoMIJ5vJIdG6QtHBzRxIxRTLSiz9GqD3unG4nJvk8dTHTW8GKKOPgBF4L_uhXWrDP9HhLybHkQ14Je3mWz2XcQMcDW1V7Sr39HPIVEHBcFTfMm8uJEewRwhYtKF7yHeBP1AexlTykHeXZx2B0mvZqXuC70KALn_sFTyRVxeldPvUBq63z_tDF1UVpb-C6IMoPv7QzCQgOx55aFCOhkIttoaTtBhYVEXJSTmrMPapUx7oiQVSRiXdP6lA"/>
 </div>
 <div class="relative z-10 text-on-primary-container">
-<h1 class="text-5xl font-extrabold leading-tight tracking-tight mb-6">
+<h1 id="smartMedication" class="text-5xl font-extrabold leading-tight tracking-tight mb-6">
                    Smart Medication <br/>Simplified
 
                     </h1>
-<p class="text-lg opacity-90 max-w-md font-body">
+<p id="description" class="text-lg opacity-90 max-w-md font-body">
                        Manage and monitor medication effortlessly. Patients take doses with guided AR, while caregivers stay informed in real-time — ensuring better adherence and peace of mind.
                     </p>
 <div class="mt-12 flex flex-col gap-4">
@@ -132,13 +132,13 @@
 <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
 <span class="material-symbols-outlined text-on-secondary-fixed text-sm">verified_user</span>
 </div>
-<span class="text-sm font-semibold">HIPAA Compliant Protocol</span>
+<span  id="hipaa" class="text-sm font-semibold">HIPAA Compliant Protocol</span>
 </div>
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center">
 <span class="material-symbols-outlined text-on-secondary-fixed text-sm">encrypted</span>
 </div>
-<span class="text-sm font-semibold">End-to-End Encryption</span>
+<span id="encryption" class="text-sm font-semibold">End-to-End Encryption</span>
 </div>
 </div>
 </div>
@@ -146,12 +146,12 @@
 <!-- Right Side: Login Form -->
 <div class="w-full md:w-1/2 p-8 md:p-16 flex flex-col justify-center">
 <div class="mb-10">
-<h2 class="text-3xl font-bold text-on-surface tracking-tight mb-2">Welcome Back</h2>
-<p class="text-on-surface-variant">Access your Clinical Pill Dose workspace.</p>
+<h2 id="welcomeBack" class="text-3xl font-bold text-on-surface tracking-tight mb-2">Welcome Back</h2>
+<p id="workspace" class="text-on-surface-variant">Access your Clinical Pill Dose workspace.</p>
 </div>
 <form id="loginForm" class="space-y-6">
 <div class="space-y-1">
-<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1" for="email">Email Address</label>
+<label id="emailLabel" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant px-1" for="email">Email Address</label>
 <div class="relative group">
 <div class="absolute left-0 bottom-0 w-full h-0.5 bg-outline-variant group-focus-within:bg-primary transition-colors"></div>
 <input class="w-full bg-surface-container-low border-none py-4 px-1 focus:ring-0 text-on-surface placeholder:text-outline/50 transition-all" id="email" name="email" placeholder="dr.smith@clinicalatelier.com" type="email"/>
@@ -159,8 +159,8 @@
 </div>
 <div class="space-y-1">
 <div class="flex justify-between items-end px-1">
-<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="password">Password</label>
-<a class="text-xs font-semibold text-primary hover:underline transition-all" href="#">Forgot Password?</a>
+<label id="passwordLabel" class="text-xs font-bold uppercase tracking-widest text-on-surface-variant" for="password">Password</label>
+<a id="forgotPassword" class="text-xs font-semibold text-primary hover:underline transition-all" href="#">Forgot Password?</a>
 </div>
 <div class="relative group">
 <div class="absolute left-0 bottom-0 w-full h-0.5 bg-outline-variant group-focus-within:bg-primary transition-colors"></div>
@@ -168,7 +168,7 @@
 </div>
 </div>
 <div class="pt-4 flex flex-col gap-6">
-<button class="w-full bg-primary hover:bg-primary-container text-on-primary font-bold py-4 rounded-lg transition-all active:scale-95 shadow-sm" type="submit">
+<button id="signInBtn" class="w-full bg-primary hover:bg-primary-container text-on-primary font-bold py-4 rounded-lg transition-all active:scale-95 shadow-sm" type="submit">
                             Sign In
                         </button>
 <div class="relative flex items-center py-4">
@@ -187,9 +187,9 @@
 </div>
 </form>
 <div class="mt-12 text-center">
-<p class="text-sm text-on-surface-variant">
+<p id="newUser" class="text-sm text-on-surface-variant">
                         New to the Pill Dose? 
-                        <a class="text-primary font-bold hover:underline ml-1" href="signup.html">Create an account</a>
+                        <a id="createAccount" class="text-primary font-bold hover:underline ml-1" href="signup.html">Create an account</a>
 </p>
 </div>
 </div>
@@ -202,15 +202,20 @@
                  Pill Dose
             </div>
 <div class="flex flex-wrap justify-center gap-6 text-sm text-slate-500 font-body">
-<a class="hover:text-blue-600 transition-all" href="#">Privacy Policy</a>
-<a class="hover:text-blue-600 transition-all" href="#">Terms of Service</a>
+<a id="privacy" class="hover:text-blue-600 transition-all" href="#">Privacy Policy</a>
+<a id="terms" class="hover:text-blue-600 transition-all" href="#">Terms of Service</a>
 <a class="hover:text-blue-600 transition-all" href="#">HIPAA Compliance</a>
-<a class="hover:text-blue-600 transition-all" href="#">Accessibility</a>
+<a id="accessibility" class="hover:text-blue-600 transition-all" href="#">Accessibility</a>
 </div>
-<div class="text-xs text-slate-500">
+<div id="footerText" class="text-xs text-slate-500">
                 © 2024 The Pill Dose. Empathetic Precision in Healthcare.
             </div>
 </div>
 </footer>
 </body></html>
+<script src="../js/config.js"></script>
+
+<script src="../js/translations.js"></script>
+
+<script src="../js/i18n.js"></script>
 <script src="../js/authlogin.js"></script>
