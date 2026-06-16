@@ -7,10 +7,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const payload = { email, password };
 
   console.log("Login request:", payload);
-showToast(
-  "Pill Dose system is active",
-  "info"
-);
+
+
 
 function showToast(message, type = "success") {
 
@@ -44,6 +42,10 @@ function showToast(message, type = "success") {
   }, 3000);
 }
 
+showToast(
+  "Pill Dose system is active",
+  "info"
+);
 
   try {
     const res = await fetch("https://pilldose.onrender.com/auth/login", {
