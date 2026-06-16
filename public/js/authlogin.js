@@ -7,6 +7,43 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const payload = { email, password };
 
   console.log("Login request:", payload);
+showToast(
+  "Pill Dose system is active",
+  "info"
+);
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  toast.innerText = message;
+
+  toast.classList.remove(
+    "hidden",
+    "bg-green-600",
+    "bg-red-600",
+    "bg-blue-600"
+  );
+
+  switch (type) {
+    case "error":
+      toast.classList.add("bg-red-600");
+      break;
+
+    case "info":
+      toast.classList.add("bg-blue-600");
+      break;
+
+    default:
+      toast.classList.add("bg-green-600");
+  }
+
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 3000);
+}
+
 
   try {
     const res = await fetch("https://pilldose.onrender.com/auth/login", {
