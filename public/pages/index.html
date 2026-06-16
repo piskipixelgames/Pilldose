@@ -216,7 +216,19 @@
 </footer>
 <div
   id="toast"
-  class="fixed top-6 right-6 z-50 hidden px-6 py-4 rounded-xl shadow-xl text-white font-semibold transition-all duration-300">
+  class="fixed top-6 right-6 z-50 hidden min-w-[320px] bg-white rounded-xl shadow-2xl border border-slate-200 p-4">
+  <div class="flex items-center gap-3">
+    <span id="toastIcon"
+      class="material-symbols-outlined">
+      check_circle
+    </span>
+
+    <div>
+      <p id="toastMessage"
+         class="font-semibold text-slate-900">
+      </p>
+    </div>
+  </div>
 </div>
 </body></html>
 <script src="../js/config.js"></script>

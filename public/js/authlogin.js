@@ -1,15 +1,3 @@
-document.getElementById("loginForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
-
-  const payload = { email, password };
-
-  console.log("Login request:", payload);
-
-
-
 function showToast(message, type = "success") {
 
 const toast = document.getElementById("toast");
@@ -46,6 +34,20 @@ showToast(
   "Pill Dose system is active",
   "info"
 );
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  const payload = { email, password };
+
+  console.log("Login request:", payload);
+
+
+
+
 
   try {
     const res = await fetch("https://pilldose.onrender.com/auth/login", {
