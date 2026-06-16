@@ -12,8 +12,8 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
 function showToast(message, type = "success") {
 
-  const toast =
-    document.getElementById("toast");
+const toast = document.getElementById("toast");
+console.log(toast.className);
 
   toast.innerText = message;
 
