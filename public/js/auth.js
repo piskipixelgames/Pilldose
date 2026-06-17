@@ -25,6 +25,41 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
     role
   };
 
+
+
+  function showToast(message, type = "success") {
+
+const toast = document.getElementById("toast");
+console.log(toast.className);
+
+  toast.innerText = message;
+
+  toast.classList.remove(
+    "hidden",
+    "bg-green-600",
+    "bg-red-600",
+    "bg-blue-600"
+  );
+
+  switch (type) {
+    case "error":
+      toast.classList.add("bg-red-600");
+      break;
+
+    case "info":
+      toast.classList.add("bg-blue-600");
+      break;
+
+    default:
+      toast.classList.add("bg-green-600");
+  }
+
+  setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 3000);
+}
+
+
   // ✅ Log outgoing request data
   console.log("Sending signup data:", payload);
 
@@ -43,6 +78,10 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
     console.log("Response from server:", data);
 
     if (data.error) {
+           showToast(
+  "There is an issue creating your account, Try again",
+  "error"
+);
       alert(data.error);
       return;
     }
@@ -52,6 +91,10 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
 
     console.log("User registered successfully:", data.user);
 
+               showToast(
+  "Success",
+  "success"
+);
     // ✅ Redirect based on role
     if (data.user.role === "PATIENT") {
       window.location.href = "index.html";

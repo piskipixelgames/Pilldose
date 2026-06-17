@@ -30,10 +30,7 @@ console.log(toast.className);
   }, 3000);
 }
 
-showToast(
-  "Pill Dose system is active",
-  "info"
-);
+
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -63,6 +60,10 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     console.log("Login response:", data);
 
     if (data.error) {
+      showToast(
+  "Enter valid credentials and try again",
+  "error"
+);
       alert(data.error);
       return;
     }
@@ -73,6 +74,11 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     console.log("Login successful:", data.user);
 
  localStorage.setItem("user", JSON.stringify(data.user));
+ 
+ showToast(
+  "Success",
+  "success"
+);
  
     if (data.user.role === "PATIENT") {
       window.location.href = "patient.html";
