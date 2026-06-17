@@ -1,6 +1,26 @@
 const inputs = document.querySelectorAll('input[maxlength="1"]');
 const connectBtn = document.getElementById("connectBtn");
 
+function logout() {
+
+  const confirmed = confirm(
+    "Are you sure you want to logout?"
+  );
+
+  if (!confirmed) return;
+
+  // Remove all stored user data
+  localStorage.removeItem("user");
+  localStorage.removeItem("selectedPatient");
+
+  // If you store tokens
+  localStorage.removeItem("token");
+  localStorage.removeItem("authToken");
+
+  // Redirect to login page
+  window.location.href = "index.html";
+}
+
 // ✅ Auto move next
 inputs.forEach((input, index) => {
   input.addEventListener("input", (e) => {
