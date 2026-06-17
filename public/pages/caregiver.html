@@ -130,16 +130,16 @@
 <nav class="flex flex-col gap-1 font-['Inter'] text-sm font-medium">
   <a class="flex items-center gap-3 px-4 py-3 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-400 rounded-lg shadow-sm transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="caregiver.html">
 <span class="material-symbols-outlined text-xl">calendar_view_week</span>
-<span>Weekly Schedule</span>
+<span id="weeklyScheduleText">Weekly Schedule</span>
 </a>
 <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="#">
 <span class="material-symbols-outlined text-xl">group</span>
-<span>Patient List</span>
+<span id="patientListText">Patient List</span>
 </a>
 
 <a class="flex items-center gap-3 px-4 py-3 text-slate-600 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-800/50 rounded-lg transition-transform duration-200 hover:translate-x-1 cursor-pointer" href="addpatient.html">
 <span class="material-symbols-outlined text-xl">add_link</span>
-<span>Pairing</span>
+<span id="pairingText">Pairing</span>
 </a>
 
 </nav>
@@ -167,12 +167,12 @@
 <span>/</span>
 <span>Medication Manager</span>
 </nav>
-<h1 class="text-4xl font-extrabold tracking-tight text-on-surface">Weekly Pillbox Scheduler</h1>
-<p class="text-on-surface-variant mt-1 font-medium">Coordinate clinical dosages with empathetic precision for the current cycle.</p>
+<h1 id="schedulerTitle" class="text-4xl font-extrabold tracking-tight text-on-surface">Weekly Pillbox Scheduler</h1>
+<p  id="schedulerDescription" class="text-on-surface-variant mt-1 font-medium">Coordinate clinical dosages with empathetic precision for the current cycle.</p>
 </div>
 <div class="flex gap-3">
 
-<button onclick="publishSchedule()" class="px-5 py-2.5 bg-primary text-on-primary rounded-lg font-semibold flex items-center gap-2 hover:brightness-105 transition-all shadow-md">
+<button id="publishScheduleBtn" onclick="publishSchedule()" class="px-5 py-2.5 bg-primary text-on-primary rounded-lg font-semibold flex items-center gap-2 hover:brightness-105 transition-all shadow-md">
 <span class="material-symbols-outlined text-lg">publish</span>
                     Publish Schedule
                 </button>
@@ -182,7 +182,7 @@
 <div class="bg-surface-container-low p-4 rounded-xl flex items-center justify-between border border-surface-container-high">
 <div class="flex items-center gap-6">
 <div class="flex flex-col">
-<span class="text-[10px] font-bold text-outline uppercase tracking-tighter">Your Patient</span>
+<span id="yourPatientText" class="text-[10px] font-bold text-outline uppercase tracking-tighter">Your Patient</span>
 <div class="flex items-center gap-1">
   <select
     id="patientSelect"
@@ -237,8 +237,8 @@
 <!-- MODAL -->
 <div id="medicineModal" class="hidden fixed inset-0 bg-black/40 flex items-center justify-center z-50">
   <div class="bg-white p-6 rounded-xl w-80">
-    <h3 class="font-bold mb-3">Add Medication</h3>
-    <input id="medicineInput" class="w-full border p-2 rounded mb-4" placeholder="e.g. Panadol 500mg"/>
+    <h3 id="addMedicationTitle" class="font-bold mb-3">Add Medication</h3>
+    <input id="medicineInput" id="medicineInput" class="w-full border p-2 rounded mb-4" placeholder="e.g. Panadol 500mg"/>
     <input 
   id="timeInput" 
   type="time" 
@@ -247,8 +247,8 @@
 
 
     <div class="flex justify-end gap-2">
-      <button onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded">Cancel</button>
-      <button onclick="saveMedicine()" class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
+      <button id="cancelBtn" onclick="closeModal()" class="px-3 py-1 bg-gray-200 rounded">Cancel</button>
+      <button id="saveBtn" onclick="saveMedicine()" class="px-3 py-1 bg-blue-600 text-white rounded">Save</button>
     </div>
   </div>
 </div>
