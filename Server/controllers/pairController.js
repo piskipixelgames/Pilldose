@@ -69,7 +69,7 @@ exports.pairPatient = async (req, res) => {
     }
 
     // ✅ 1 PATIENT → 1 CAREGIVER
-
+/*
     if (
       patient.caregivers &&
       patient.caregivers.length > 0
@@ -91,9 +91,9 @@ exports.pairPatient = async (req, res) => {
           "Caregiver already paired with a patient"
       });
     }
-
+*/
     // ✅ Prevent duplicates
-
+/*
     if (
       patient.caregivers.includes(
         caregiver._id
@@ -104,9 +104,19 @@ exports.pairPatient = async (req, res) => {
           "Already paired"
       });
     }
+*/
+const alreadyPaired =
+  patient.caregivers.some(
+    id => id.toString() === caregiver._id.toString()
+  );
 
+if (alreadyPaired) {
+  return res.status(400).json({
+    message: "Already paired"
+  });
+}
     // ✅ Link both sides
-
+/*
     patient.caregivers.push(
       caregiver._id
     );
@@ -114,6 +124,24 @@ exports.pairPatient = async (req, res) => {
     caregiver.patients.push(
       patient._id
     );
+*/
+
+if (
+  !patient.caregivers.some(
+    id => id.toString() === caregiver._id.toString()
+  )
+) {
+  patient.caregivers.push(caregiver._id);
+}
+
+if (
+  !caregiver.patients.some(
+    id => id.toString() === patient._id.toString()
+  )
+) {
+  caregiver.patients.push(patient._id);
+}
+
 
     await patient.save();
 
