@@ -182,9 +182,14 @@
 <div class="flex items-center gap-6">
 <div class="flex flex-col">
 <span class="text-[10px] font-bold text-outline uppercase tracking-tighter">Your Patient</span>
-<div class="flex items-center gap-2 cursor-pointer">
-<span id="patientName" class="text-lg font-bold text-on-surface">Loading...</span>->
-
+<div class="flex items-center gap-2">
+  <select
+    id="patientSelect"
+    onchange="changePatient()"
+    class="bg-white border border-gray-300 rounded-lg px-3 py-2 font-semibold"
+  >
+    <option>Loading...</option>
+  </select>
 </div>
 </div>
 <div class="h-8 w-px bg-outline-variant"></div>
@@ -372,36 +377,173 @@ function buildSchedulePayload() {
 
 async function loadPatients() {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
 
-  const res = await fetch(`https://pilldose.onrender.com/api/caregiver/${user.id}/patients`);
-    const data = await res.json();
+    const user =
+      JSON.parse(localStorage.getItem("user"));
 
-    console.log("Patients:", data);
+    const res =
+      await fetch(
+        `https://pilldose.onrender.com/api/caregiver/${user.id}/patients`
+      );
 
-    const patientNameEl = document.getElementById("patientName");
+    const data =
+      await res.json();
 
-    if (!data.patients || data.patients.length === 0) {
-      // ❌ No patients case
-      patientNameEl.innerText = "No Patient";
-      localStorage.removeItem("selectedPatient");
+    const patientSelect =
+      document.getElementById("patientSelect");
+
+    patientSelect.innerHTML = "";
+
+    if (
+      !data.patients ||
+      data.patients.length === 0
+    ) {
+      patientSelect.innerHTML =
+        `<option>No Patients</option>`;
+
+      localStorage.removeItem(
+        "selectedPatient"
+      );
+
       return;
     }
 
-    // ✅ At least one patient
-    const patient = data.patients[0];
+    // Populate dropdown
 
-    localStorage.setItem("selectedPatient", JSON.stringify(patient));
-    patientNameEl.innerText = patient.name;
+    data.patients.forEach(patient => {
+
+      const option =
+        document.createElement("option");
+
+      option.value =
+        patient._id;
+
+      option.textContent =
+        patient.name;
+
+      patientSelect.appendChild(option);
+
+    });
+
+    // Restore previous selection if available
+
+    let selectedPatient =
+      JSON.parse(
+        localStorage.getItem(
+          "selectedPatient"
+        )
+      );
+
+    if (
+      selectedPatient &&
+      data.patients.some(
+        p => p._id === selectedPatient._id
+      )
+    ) {
+
+      patientSelect.value =
+        selectedPatient._id;
+
+    } else {
+
+      selectedPatient =
+        data.patients[0];
+
+      localStorage.setItem(
+        "selectedPatient",
+        JSON.stringify(selectedPatient)
+      );
+
+      patientSelect.value =
+        selectedPatient._id;
+    }
+
+    // Load selected patient data
+
+    await loadPatientData();
 
   } catch (err) {
-    console.error("Error loading patients", err);
-    document.getElementById("patientName").innerText = "Error loading";
+
+    console.error(
+      "Error loading patients",
+      err
+    );
   }
 }
 
+async function changePatient() {
 
+  const patientSelect =
+    document.getElementById(
+      "patientSelect"
+    );
 
+  const selectedId =
+    patientSelect.value;
+
+  const user =
+    JSON.parse(
+      localStorage.getItem("user")
+    );
+
+  try {
+
+    const res =
+      await fetch(
+        `https://pilldose.onrender.com/api/caregiver/${user.id}/patients`
+      );
+
+    const data =
+      await res.json();
+
+    const patient =
+      data.patients.find(
+        p => p._id === selectedId
+      );
+
+    if (!patient) return;
+
+    localStorage.setItem(
+      "selectedPatient",
+      JSON.stringify(patient)
+    );
+
+    await loadPatientData();
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+}
+async function loadPatientData() {
+
+  const selectedPatient =
+    JSON.parse(
+      localStorage.getItem(
+        "selectedPatient"
+      )
+    );
+
+  if (!selectedPatient)
+    return;
+
+  // Clear old schedule
+
+  schedule = {};
+
+  document
+    .querySelectorAll(
+      '[id^="slot-"]'
+    )
+    .forEach(slot => {
+      slot.innerHTML = "";
+    });
+
+  await loadStats();
+
+  await loadSchedule();
+}
 
     const colorPalette = [
   "bg-blue-100 border-blue-500",
@@ -793,6 +935,7 @@ function logout() {
 generateHeader();
 generateGrid();
 generateDateRange();
-loadSchedule();
+
+loadPatients();
 </script>
 </body></html>
