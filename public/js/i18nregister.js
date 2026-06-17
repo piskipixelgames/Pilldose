@@ -59,8 +59,8 @@ function applyTranslations() {
     document.getElementById("createPassword").innerText =
         t.createPassword;
 
-    document.getElementById("rule-length-text").innerText =
-        t.ruleLength;
+    //document.getElementById("rule-length-text").innerText =
+      //  t.ruleLength;
 
     document.getElementById("rule-number-text").innerText =
         t.ruleNumber;
