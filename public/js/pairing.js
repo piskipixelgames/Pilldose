@@ -77,6 +77,8 @@ connectBtn.addEventListener("click", async () => {
   connectBtn.innerText = "Connecting...";
   connectBtn.disabled = true;
   const user = JSON.parse(localStorage.getItem("user"));
+
+  document.getElementById("profileName").innerText = user.name;
   
 const caregiverId = user.id;
 console.log("CAREGIVERID :"+user.id);
