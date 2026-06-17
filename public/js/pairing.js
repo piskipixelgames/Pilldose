@@ -1,6 +1,10 @@
 const inputs = document.querySelectorAll('input[maxlength="1"]');
 const connectBtn = document.getElementById("connectBtn");
 
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  document.getElementById("profileName").innerText = user.name;
+
 function logout() {
 
   const confirmed = confirm(
@@ -76,9 +80,7 @@ connectBtn.addEventListener("click", async () => {
   // UI loading
   connectBtn.innerText = "Connecting...";
   connectBtn.disabled = true;
-  const user = JSON.parse(localStorage.getItem("user"));
 
-  document.getElementById("profileName").innerText = user.name;
   
 const caregiverId = user.id;
 console.log("CAREGIVERID :"+user.id);
