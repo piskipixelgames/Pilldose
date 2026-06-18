@@ -11,8 +11,8 @@ function applyTranslations() {
 
     // Main Dashboard
 
-   //DoseLabel").innerText =
-    //    t.lastDose;
+    document.getElementById("lastDoseLabel").innerText =
+        t.lastDose;
 
     document.getElementById("progressText").innerText =
         t.loadingProgress;
