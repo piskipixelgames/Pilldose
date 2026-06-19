@@ -1,8 +1,17 @@
 function applySchedulerTranslations() {
 
-  const lang =
-    window.APP_CONFIG?.LANGUAGE || "en";
+  //const lang =
+   // window.APP_CONFIG?.LANGUAGE || "en";
 
+       const lang =
+
+        localStorage.getItem("language") ||
+
+        window.APP_CONFIG?.LANGUAGE ||
+
+        "en";
+
+        
   const t =
     schedulerTranslations[lang] ||
     schedulerTranslations.en;
