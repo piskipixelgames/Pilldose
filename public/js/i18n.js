@@ -1,7 +1,36 @@
+function toggleLanguage() {
+
+    const current =
+        localStorage.getItem("language") || "en";
+
+    const next =
+        current === "en"
+            ? "es"
+            : "en";
+
+    localStorage.setItem(
+        "language",
+        next
+    );
+
+    window.APP_CONFIG.LANGUAGE =
+        next;
+
+    applyTranslations();
+}
+
 function applyTranslations() {
 
-    const lang =
-        window.APP_CONFIG?.LANGUAGE || "en";
+    //const lang =
+      //  window.APP_CONFIG?.LANGUAGE || "en";
+
+      const lang =
+
+        localStorage.getItem("language") ||
+
+        window.APP_CONFIG?.LANGUAGE ||
+
+        "en";
 
     const t =
         translations[lang] || translations.en;
