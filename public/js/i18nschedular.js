@@ -11,7 +11,7 @@ function applySchedulerTranslations() {
 
         "en";
 
-        
+
   const t =
     schedulerTranslations[lang] ||
     schedulerTranslations.en;
@@ -24,11 +24,11 @@ function applySchedulerTranslations() {
   ).innerText =
     t.weeklySchedule;
 
-  document.getElementById(
+  /*document.getElementById(
     "patientListText"
   ).innerText =
     t.patientList;
-
+*/
   document.getElementById(
     "pairingText"
   ).innerText =
