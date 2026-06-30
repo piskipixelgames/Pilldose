@@ -11,6 +11,8 @@ const caregiverController = require("./controllers/caregiverController");
 const patientController = require("./controllers/patientController");
 const scheduleController = require("./controllers/scheduleController");
 const statsController = require("./controllers/statsController");
+const dashboardController =
+  require("./controllers/dashboardController");
 const sendPushNotification =
   require("./utils/sendPushNotification");
   
@@ -35,6 +37,10 @@ app.get("/api/schedule/:patientId", scheduleController.getSchedulesForPatient);
 app.delete("/schedule/:id", scheduleController.deleteSchedule);
 app.get("/api/stats/:userId", statsController.getStats);
 app.use("/api/device-token", require("./controllers/deviceToken"));
+app.get(
+  "/api/patient/:patientId/dashboard",
+  dashboardController.getDashboard
+);
 app.get(
   "/test-push/:userId",
   async (req, res) => {
