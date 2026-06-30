@@ -91,11 +91,11 @@ function applyTranslations() {
     //document.getElementById("rule-length-text").innerText =
       //  t.ruleLength;
 
-    //document.getElementById("rule-number-text").innerText =
-      //  t.ruleNumber;
+    document.getElementById("rule-number-text").innerText =
+        t.ruleNumber;
 
-    //document.getElementById("rule-symbol-text").innerText =
-      //  t.ruleSymbol;
+    document.getElementById("rule-symbol-text").innerText =
+        t.ruleSymbol;
 
     document.getElementById("completeSignupBtn").innerText =
         t.completeSignup;
@@ -103,10 +103,10 @@ function applyTranslations() {
     document.getElementById("alreadyAccount").innerText =
         t.alreadyAccount;
 
-    document.getElementById("loginLink").innerHTML =
+    document.getElementById("loginLink").innerText =
         t.login;
 
-    document.getElementById("privacyPolicyLink").innerHTML =
+    document.getElementById("privacyPolicyLink").innerText =
         t.privacyPolicy;
 
     document.getElementById("termsLink").innerText =
@@ -121,13 +121,13 @@ function applyTranslations() {
     document.getElementById("footerText").innerText =
         t.footer;
 
-         document.getElementById("termsLabel").innerText =
+         document.getElementById("termsLabel").innerHTML =
         t.termsAccept;
 
          document.getElementById("completeSignupBtn").innerText =
         t.signUpButton;
 
-         document.getElementById("alreadyAccount").innerText =
+         document.getElementById("alreadyAccount").innerHTML =
         t.alreadyAccount;
         
         
