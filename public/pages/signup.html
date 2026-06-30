@@ -252,15 +252,16 @@
 <div class="pt-6 border-t border-surface-container space-y-6">
 <div class="flex items-center gap-3">
 <input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" id="terms" type="checkbox"/>
-<label id="termsLabel" class="text-sm text-on-surface-variant" for="terms">
-                                    I agree to the <a class="text-primary font-semibold hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-semibold hover:underline" href="#">HIPAA Privacy Policy</a>.
+<label  class="text-sm text-on-surface-variant" for="terms">
+  <div id="termsLabel">
+                                    I agree to the <a class="text-primary font-semibold hover:underline" href="#">Terms of Service</a> and <a class="text-primary font-semibold hover:underline" href="#">HIPAA Privacy Policy</a>.</div>
                                 </label>
 </div>
 <button id="completeSignupBtn" class="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-lg rounded-lg shadow-lg shadow-primary/20 hover:brightness-105 active:scale-[0.98] transition-all" type="submit">
                                 Complete Sign Up
                             </button>
-<p id="alreadyAccount" class="text-center text-sm text-on-surface-variant">
-                                Already have an account? <a id="loginLink" class="text-primary font-bold hover:underline" href="index.html">Log In</a>
+<div id="alreadyAccount"><p  class="text-center text-sm text-on-surface-variant">
+                                Already have an account? <a id="loginLink" class="text-primary font-bold hover:underline" href="index.html">Log In</a></div>
 </p>
 </div>
 </form>
