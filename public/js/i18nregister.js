@@ -103,8 +103,8 @@ function applyTranslations() {
     document.getElementById("alreadyAccount").innerText =
         t.alreadyAccount;
 
-    document.getElementById("loginLink").innerText =
-        t.login;
+    //document.getElementById("loginLink").innerText =
+       // t.login;
 
     document.getElementById("privacyPolicyLink").innerText =
         t.privacyPolicy;
