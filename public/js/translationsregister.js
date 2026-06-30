@@ -50,6 +50,12 @@ const translations = {
     hipaaCompliance: "HIPAA Compliance",
     accessibility: "Accessibility",
 
+termsAceept: "I agree to the <a class='text-primary font-semibold hover:underline' href='#'>Terms of Service</a> and <a class='text-primary font-semibold hover:underline' href='#'>HIPAA Privacy Policy</a>.",
+signUpButton: "Complete Sign Up",
+alreadyAccount: " Already have an account? <a id='loginLink' class='text-primary font-bold hover:underline href='index.html'>Log In</a>",
+
+
+
     footer:
       "© 2024 The Pill Dose. Empathetic Precision in Healthcare."
   },
@@ -103,6 +109,12 @@ const translations = {
     hipaaCompliance: "Cumplimiento HIPAA",
     accessibility: "Accesibilidad",
 
+termsAccept: "Acepto los <a class='text-primary font-semibold hover:underline' href='#'>Términos de Servicio</a> y la <a class='text-primary font-semibold hover:underline' href='#'>Política de Privacidad HIPAA</a>.",
+
+signUpButton: "Completar Registro",
+
+alreadyAccount: "¿Ya tienes una cuenta? <a id='loginLink' class='text-primary font-bold hover:underline' href='index.html'>Iniciar Sesión</a>",
+    
     footer:
       "© 2024 Pill Dose. Precisión empática en la atención médica."
   }

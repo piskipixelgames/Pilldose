@@ -120,6 +120,17 @@ function applyTranslations() {
 
     document.getElementById("footerText").innerText =
         t.footer;
+
+         document.getElementById("termsLabel").innerText =
+        t.termsAccept;
+
+         document.getElementById("completeSignupBtn").innerText =
+        t.signUpButton;
+
+         document.getElementById("alreadyAccount").innerText =
+        t.alreadyAccount;
+        
+        
 }
 
 document.addEventListener(
