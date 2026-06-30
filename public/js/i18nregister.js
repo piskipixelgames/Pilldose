@@ -91,11 +91,11 @@ function applyTranslations() {
     //document.getElementById("rule-length-text").innerText =
       //  t.ruleLength;
 
-    document.getElementById("rule-number-text").innerText =
-        t.ruleNumber;
+    //document.getElementById("rule-number-text").innerText =
+      //  t.ruleNumber;
 
-    document.getElementById("rule-symbol-text").innerText =
-        t.ruleSymbol;
+    //document.getElementById("rule-symbol-text").innerText =
+      ///  t.ruleSymbol;
 
     document.getElementById("completeSignupBtn").innerText =
         t.completeSignup;
