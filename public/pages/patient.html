@@ -567,12 +567,21 @@ function updateGreeting() {
   const name = user?.name || "there";
 
   const hour = new Date().getHours();
+  
+const lang =
+    localStorage.getItem("language") || "en";
 
-  let greeting = "Hello";
+const t =
+    translations[lang];
 
-  if (hour < 12) greeting = "Good morning";
-  else if (hour < 18) greeting = "Good afternoon";
-  else greeting = "Good evening";
+let greeting = t.greetingDefault;
+
+if (hour < 12)
+    greeting = t.greetingMorning;
+else if (hour < 18)
+    greeting = t.greetingAfternoon;
+else
+    greeting = t.greetingEvening;
 
   document.getElementById("greetingText").innerText =
     `${greeting}, ${name}.`;
