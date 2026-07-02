@@ -24,8 +24,8 @@ function applyTranslations() {
     document.getElementById("weeklyScheduleText").innerText =
         t.weeklySchedule;
 
-    document.getElementById("patientListText").innerText =
-        t.patientList;
+    //document.getElementById("patientListText").innerText =
+      //  t.patientList;
 
     document.getElementById("pairingText").innerText =
         t.pairing;
