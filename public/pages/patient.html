@@ -984,11 +984,7 @@ function formatTimeRemaining(targetTime) {
 
 
 
-// Color logic
-const trendEl = document.getElementById("adherenceTrend");
-if (adherence >= 90) trendEl.classList.add("text-green-500");
-else if (adherence >= 70) trendEl.classList.add("text-yellow-500");
-else trendEl.classList.add("text-red-500");
+
 
 // Next dose
 const nextDose = getNextDose(schedule);
