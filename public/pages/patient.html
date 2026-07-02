@@ -567,7 +567,7 @@ function updateGreeting() {
   const name = user?.name || "there";
 
   const hour = new Date().getHours();
-  
+
 const lang =
     localStorage.getItem("language") || "en";
 
@@ -995,10 +995,17 @@ function formatTimeRemaining(targetTime) {
 
 function logout() {
 
-  const confirmed = confirm(
-    "Are you sure you want to logout?"
-  );
+ const t =
 
+translations[
+
+    localStorage.getItem("language") || "en"
+
+];
+
+const confirmed =
+
+confirm(t.logoutConfirm);
   if (!confirmed) return;
 
   // Remove all stored user data
