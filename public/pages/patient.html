@@ -464,6 +464,7 @@ updateNextDoseCard(data);
 
     renderPatientGrid(data);
     updateClinicalInsight(data);
+    updateAdherenceCard(data);
   } catch (err) {
     console.error("Error loading patient schedule:", err);
   }
@@ -885,6 +886,57 @@ function updateClinicalInsight(data) {
   const text = generateClinicalInsight(data);
 
   document.getElementById("clinicalInsightText").innerText = text;
+}
+
+function updateAdherenceCard(data) {
+
+    if (!data || data.length === 0) {
+
+        document.getElementById("adherenceValue").innerText = "--%";
+        document.getElementById("adherenceTrend").innerText = "No data";
+
+        return;
+    }
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    // Today's scheduled doses
+    const todaysDoses =
+        data.filter(d => d.date === today);
+
+    const totalToday =
+        todaysDoses.length;
+
+    const takenToday =
+        todaysDoses.filter(d => d.status === "TAKEN").length;
+
+    const adherence =
+        totalToday === 0
+            ? 0
+            : Math.round((takenToday / totalToday) * 100);
+
+    document.getElementById("adherenceValue").innerText =
+        adherence + "%";
+
+    document.getElementById("adherenceTrend").innerText =
+        `${takenToday}/${totalToday} doses taken`;
+
+    const trend =
+        document.getElementById("adherenceTrend");
+
+    trend.classList.remove(
+        "text-red-500",
+        "text-yellow-500",
+        "text-green-500"
+    );
+
+    if (adherence >= 90)
+        trend.classList.add("text-green-500");
+    else if (adherence >= 70)
+        trend.classList.add("text-yellow-500");
+    else
+        trend.classList.add("text-red-500");
 }
 
 function calculateAdherence(dosesTaken, totalDoses) {
