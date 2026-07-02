@@ -984,28 +984,6 @@ function formatTimeRemaining(targetTime) {
 
 
 
-
-
-// Next dose
-const nextDose = getNextDose(schedule);
-
-if (nextDose) {
-  document.getElementById("nextDoseTime").innerText =
-    formatTimeRemaining(nextDose);
-
-  document.getElementById("doseStatus").innerText = "Upcoming";
-} else {
-  document.getElementById("nextDoseTime").innerText = "None";
-  document.getElementById("doseStatus").innerText = "All doses completed";
-}
-
-setInterval(() => {
-  if (nextDose) {
-    document.getElementById("nextDoseTime").innerText =
-      formatTimeRemaining(nextDose);
-  }
-}, 1000);
-
 function logout() {
 
   const confirmed = confirm(
