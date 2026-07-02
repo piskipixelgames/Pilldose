@@ -455,6 +455,7 @@ async function loadPatientSchedule() {
 
     renderPatientGrid(data);
 updateNextDoseUI(data);
+updateNextDoseCard(data);
     // ✅ NEW
     updateGreeting();
     updateProgress(data);
@@ -466,6 +467,30 @@ updateNextDoseUI(data);
   } catch (err) {
     console.error("Error loading patient schedule:", err);
   }
+}
+
+function updateNextDoseCard(data) {
+
+    const nextDose = calculateNextDose(data);
+
+    if (!nextDose) {
+        document.getElementById("nextDoseTime").innerText = "None";
+        document.getElementById("doseStatus").innerText =
+            "All doses completed";
+        return;
+    }
+
+    function refreshCountdown() {
+        document.getElementById("nextDoseTime").innerText =
+            formatTimeRemaining(nextDose.dateTime);
+
+        document.getElementById("doseStatus").innerText =
+            nextDose.medicineName || "Upcoming Medication";
+    }
+
+    refreshCountdown();
+
+    setInterval(refreshCountdown, 1000);
 }
 
 function calculateNextDose(data) {
