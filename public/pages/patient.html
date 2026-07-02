@@ -982,22 +982,7 @@ function formatTimeRemaining(targetTime) {
 }
 
 
-// Example data (replace with API)
-const todayTaken = 5;
-const todayTotal = 6;
-const yesterdayAdherence = 70;
 
-const schedule = [
-  "2026-04-27T15:00:00",
-  "2026-04-27T20:00:00"
-];
-
-// Adherence
-const adherence = calculateAdherence(todayTaken, todayTotal);
-document.getElementById("adherenceValue").innerText = `${adherence}%`;
-
-const trend = getTrend(adherence, yesterdayAdherence);
-document.getElementById("adherenceTrend").innerText = trend;
 
 // Color logic
 const trendEl = document.getElementById("adherenceTrend");
