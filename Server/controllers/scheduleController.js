@@ -1,5 +1,31 @@
 const Schedule = require("../models/Schedule");
 
+exports.markTaken = async (req, res) => {
+
+    try {
+
+        const schedule =
+            await Schedule.findByIdAndUpdate(
+                req.params.id,
+                {
+                    status: "TAKEN"
+                },
+                {
+                    new: true
+                }
+            );
+
+        res.json(schedule);
+
+    } catch (err) {
+
+        res.status(500).json({
+            message: err.message
+        });
+    }
+
+};
+
 exports.createSchedule = async (req, res) => {
   try {
     const { schedules } = req.body;

@@ -41,6 +41,10 @@ app.get(
   "/api/patient/:patientId/dashboard",
   dashboardController.getDashboard
 );
+app.put(
+    "/api/schedule/:id/take",
+    scheduleController.markTaken
+);
 app.get(
   "/test-push/:userId",
   async (req, res) => {
