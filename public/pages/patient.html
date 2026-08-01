@@ -388,7 +388,9 @@ function buildTooltip(items, state, slot, dateStr) {
 
   if (!items || items.length === 0) return "";
 
-  const medicineNames = [...new Set(items.map(i => i.medicineName || "Medication"))].join(", ");
+  const medicineNames = [...new Set(
+      items.map(i => i.medicine || "Medication")
+  )].join(", ");
 
   const time = items[0].actualTime || "--:--";
 
@@ -400,26 +402,13 @@ function buildTooltip(items, state, slot, dateStr) {
              text-xs p-3 shadow-xl">
 
       <div class="font-bold text-sm mb-2">
-        ${medicineNames}
+        💊 ${medicineNames}
       </div>
 
       <div class="space-y-1">
-
-        <div>
-          <span class="font-semibold">Date:</span>
-          ${dateStr}
-        </div>
-
-        <div>
-          <span class="font-semibold">Time:</span>
-          ${time}
-        </div>
-
-        <div>
-          <span class="font-semibold">Status:</span>
-          ${state}
-        </div>
-
+        <div><span class="font-semibold">Date:</span> ${dateStr}</div>
+        <div><span class="font-semibold">Time:</span> ${time}</div>
+        <div><span class="font-semibold">Status:</span> ${state}</div>
       </div>
 
       <div
