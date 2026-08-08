@@ -370,8 +370,11 @@ async function publishSchedule() {
   }
 }
 function buildSchedulePayload() {
-  
-  const selectedPatient = JSON.parse(localStorage.getItem("selectedPatient"));
+
+  const selectedPatient =
+    JSON.parse(
+      localStorage.getItem("selectedPatient")
+    );
 
   if (!selectedPatient) {
     alert("No patient selected");
@@ -379,27 +382,70 @@ function buildSchedulePayload() {
   }
 
   const payload = [];
-  const today = new Date();
+
+  // Start of currently displayed week
+  const weekStart =
+    getStartOfWeek(weekOffset);
 
   Object.keys(schedule).forEach(key => {
-    const [dayOffset, timeSlot] = key.split("-");
-    const items = schedule[key];
 
-    const date = new Date();
-    date.setDate(today.getDate() + parseInt(dayOffset));
+    const [dayOffset, timeSlot] =
+      key.split("-");
 
-    const formattedDate = date.toISOString().split("T")[0];
+    const items =
+      schedule[key];
+
+    const date =
+      new Date(weekStart);
+
+    date.setDate(
+      weekStart.getDate() +
+      parseInt(dayOffset)
+    );
+
+    /*
+     * Format as YYYY-MM-DD
+     */
+    const year =
+      date.getFullYear();
+
+    const month =
+      String(date.getMonth() + 1)
+        .padStart(2, "0");
+
+    const day =
+      String(date.getDate())
+        .padStart(2, "0");
+
+    const formattedDate =
+      `${year}-${month}-${day}`;
 
     items.forEach(item => {
+
       payload.push({
-        patientId: selectedPatient._id,
-        date: formattedDate,
-        timeSlot,              // ✅ MORNING / MIDDAY / EVENING
-        actualTime: item.time, // ✅ REAL selected time
-        medicine: item.medicine,
-        status: item.status
+
+        patientId:
+          selectedPatient._id,
+
+        date:
+          formattedDate,
+
+        timeSlot:
+          timeSlot,
+
+        actualTime:
+          item.time,
+
+        medicine:
+          item.medicine,
+
+        status:
+          item.status
+
       });
+
     });
+
   });
 
   return payload;
@@ -604,19 +650,75 @@ let schedule = {};
 let selectedKey = null;
 let selectedElement = null;
 
+// Number of weeks relative to current week
+// 0  = current week
+// -1 = previous week
+// +1 = next week
+let weekOffset = 0;
+
+function getStartOfWeek(offset = 0) {
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  // Start week on Sunday
+  const day = today.getDay();
+
+  const start = new Date(today);
+  start.setDate(today.getDate() - day);
+
+  // Apply week offset
+  start.setDate(start.getDate() + (offset * 7));
+
+  return start;
+}
+
+function getDateForGridDay(dayOffset) {
+  const start = getStartOfWeek(weekOffset);
+
+  const date = new Date(start);
+  date.setDate(start.getDate() + dayOffset);
+
+  return date;
+}
+
 // ✅ Generate Header
 function generateHeader() {
-  const today = new Date();
+
   let html = `<div class="p-4"></div>`;
 
   for (let i = 0; i < 7; i++) {
-    const d = new Date();
-    d.setDate(today.getDate() + i);
+
+    const d = getDateForGridDay(i);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const isToday =
+      d.getTime() === today.getTime();
 
     html += `
-      <div class="text-center py-4 border-l">
-        <span class="text-xs font-bold block">${daysShort[d.getDay()]}</span>
-        <span class="text-lg font-bold">${d.getDate()}</span>
+      <div class="text-center py-4 border-l
+        ${isToday ? "bg-blue-50" : ""}">
+        
+        <span class="text-xs font-bold block
+          ${isToday ? "text-blue-700" : ""}">
+          ${daysShort[d.getDay()]}
+        </span>
+
+        <span class="text-lg font-bold
+          ${isToday ? "text-blue-700" : ""}">
+          ${d.getDate()}
+        </span>
+
+        ${
+          isToday
+            ? `<span class="block text-[9px] font-bold text-blue-600 uppercase">
+                Today
+              </span>`
+            : ""
+        }
+
       </div>
     `;
   }
@@ -823,31 +925,57 @@ async function loadSchedule() {
 }
 
 function mapScheduleToGrid(data) {
+
   schedule = {};
 
   if (!Array.isArray(data)) {
-    console.log("No array data");
+    console.log("No schedule data");
     return;
   }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const weekStart = getStartOfWeek(weekOffset);
 
-  console.log("TODAY =", today);
+  weekStart.setHours(0, 0, 0, 0);
+
+  console.log(
+    "Displaying week:",
+    weekStart.toISOString()
+  );
 
   data.forEach(item => {
-    console.log("RAW ITEM =", item);
 
-    if (!item.date || !item.timeSlot) return;
+    if (!item.date || !item.timeSlot)
+      return;
 
-    // safe local parsing
-    const itemDate = new Date(item.date + "T00:00:00");
-    itemDate.setHours(0,0,0,0);
+    /*
+     * Parse database date safely.
+     * Your backend stores YYYY-MM-DD.
+     */
+    const itemDate =
+      new Date(item.date + "T00:00:00");
 
+    itemDate.setHours(0, 0, 0, 0);
+
+    /*
+     * Calculate position inside displayed week.
+     *
+     * Sunday = 0
+     * Monday = 1
+     * ...
+     * Saturday = 6
+     */
     const diffDays = Math.round(
-      (itemDate.getTime() - today.getTime()) /
+      (itemDate.getTime() - weekStart.getTime()) /
       (1000 * 60 * 60 * 24)
     );
+
+    /*
+     * Only display records belonging
+     * to the currently visible 7 days.
+     */
+    if (diffDays < 0 || diffDays > 6) {
+      return;
+    }
 
     const timeSlot =
       item.timeSlot
@@ -855,50 +983,40 @@ function mapScheduleToGrid(data) {
         .trim()
         .toUpperCase();
 
-    const key = `${diffDays}-${timeSlot}`;
-
-    console.log({
-      medicine: item.medicine,
-      dbDate: item.date,
-      parsedDate: itemDate,
-      diffDays,
-      timeSlot,
-      generatedKey: key
-    });
-
-    // skip outside visible week
-    if (diffDays < 0 || diffDays > 6) {
-      console.log("SKIPPED OUTSIDE WEEK");
-      return;
-    }
-
-    // verify slot exists
-    const slotExists =
-      document.getElementById(`slot-${key}`);
-
-    console.log(
-      `slot-${key}`,
-      slotExists ? "FOUND" : "NOT FOUND"
-    );
+    const key =
+      `${diffDays}-${timeSlot}`;
 
     if (!schedule[key]) {
       schedule[key] = [];
     }
 
     schedule[key].push({
+
       _id: item._id,
-      medicine: item.medicine,
-      time: item.actualTime || "",
-      status: item.status || "PENDING"
+
+      medicine:
+        item.medicine,
+
+      time:
+        item.actualTime || "",
+
+      status:
+        item.status || "PENDING"
     });
+
   });
 
-  console.log("FINAL SCHEDULE =", schedule);
-
+  /*
+   * Render all records
+   */
   Object.keys(schedule).forEach(key => {
-    console.log("Rendering", key);
     renderSlot(key);
   });
+
+  console.log(
+    "Displayed schedule:",
+    schedule
+  );
 }
 
 async function deleteMedicine(key, index) {
@@ -930,20 +1048,67 @@ async function deleteMedicine(key, index) {
 }
 
 function generateDateRange() {
-  const today = new Date();
 
-  const start = new Date(today);
-  const end = new Date(today);
-  end.setDate(today.getDate() + 6);
+  const start = getStartOfWeek(weekOffset);
 
-  const options = { month: "short", day: "numeric" };
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
 
-  const startStr = start.toLocaleDateString("en-US", options);
-  const endStr = end.toLocaleDateString("en-US", options);
+  const options = {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  };
+
+  const startStr =
+    start.toLocaleDateString("en-US", options);
+
+  const endStr =
+    end.toLocaleDateString("en-US", options);
 
   document.getElementById("dateRange").innerText =
     `${startStr} - ${endStr}`;
 }
+
+async function changeWeek(direction) {
+
+  weekOffset += direction;
+
+  generateHeader();
+  generateDateRange();
+
+  // Clear current grid
+  schedule = {};
+
+  document
+    .querySelectorAll('[id^="slot-"]')
+    .forEach(slot => {
+      slot.innerHTML = "";
+    });
+
+  // Load records for new week
+  await loadSchedule();
+}
+
+
+async function goToCurrentWeek() {
+
+  weekOffset = 0;
+
+  generateHeader();
+  generateDateRange();
+
+  schedule = {};
+
+  document
+    .querySelectorAll('[id^="slot-"]')
+    .forEach(slot => {
+      slot.innerHTML = "";
+    });
+
+  await loadSchedule();
+}
+
 function logout() {
 
   const confirmed = confirm(
