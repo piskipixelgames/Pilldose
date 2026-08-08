@@ -217,8 +217,33 @@
 </div>
 <div class="flex items-center gap-4">
 <span id="dateRange" class="text-sm font-semibold text-on-surface-variant"></span>
-<div class="flex bg-surface-container-highest rounded-lg p-1">
+<div class="flex items-center gap-1 bg-surface-container-highest rounded-lg p-1">
+  <button
+    onclick="changeWeek(-1)"
+    class="px-3 py-2 rounded-md hover:bg-white transition"
+    title="Previous Week"
+  >
+    <span class="material-symbols-outlined text-lg">
+      chevron_left
+    </span>
+  </button>
 
+  <button
+    onclick="goToCurrentWeek()"
+    class="px-3 py-2 text-xs font-bold rounded-md hover:bg-white transition"
+  >
+    This Week
+  </button>
+
+  <button
+    onclick="changeWeek(1)"
+    class="px-3 py-2 rounded-md hover:bg-white transition"
+    title="Next Week"
+  >
+    <span class="material-symbols-outlined text-lg">
+      chevron_right
+    </span>
+  </button>
 </div>
 </div>
 </div>
